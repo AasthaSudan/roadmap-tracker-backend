@@ -3,7 +3,10 @@ const express = require('express'); //imports the Express library into file
 const app = express(); //creates an Express application object (app: ur backend app instance)
 const PORT = 3000; //sets the port number ur backend/server will run on(thru which requests reach ur app)
 
-// In-memory dummy data
+// JSON body parsing middleware - This allows the server to automatically parse incoming requests that have a JSON payload 
+app.use(express.json());
+
+// In-memory data
 let roadmaps = [
     {
         id: 1,
@@ -37,6 +40,14 @@ app.get('/inspect', (req, res) => { //inspect->lets ur server show u wht req it 
     });
 });
 
+//Inspect request body- let you see what Express received in req.body.
+app.post('/inspect-body', (req, res) => {
+    res.json({
+        message: 'Request body received successfully',
+        body: req.body,
+    });
+});
+
 //GET all roadmaps
 app.get('/roadmaps', (req, res) => {
     res.json({
@@ -46,13 +57,15 @@ app.get('/roadmaps', (req, res) => {
     });
 });
 
-//POST a new roadmap (dummy hardcoded for routing practice)
+//upgraded route: POST roadmap using real JSON body
 app.post('/roadmaps', (req, res) => {
-    const newRoadmap = {
+    const { title, description } = req.body; //read data from request body
+
+    const newRoadmap = { //So now the roadmap is client-driven, not hardcoded by the server
         id: roadmaps.length + 1,
-        title: `New Roadmap ${roadmaps.length + 1}`,
-        description: `Dummy roadmap created for Day 3 routing practice`,
-    };
+        title,
+        description,
+    }
 
     roadmaps.push(newRoadmap);
 
