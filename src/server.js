@@ -13,8 +13,9 @@ const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Middleware to parse JSON request bodies
-app.use(express.json());
+
+app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(loggerMiddleware); //apply logger to all incoming requests
 
 // In-memory data
 let roadmaps = [
@@ -58,6 +59,13 @@ User shape examples:
 }
 */
 
+function loggerMiddleware(req, res, next) {
+    const currentTime = new Date().toISOString(); //gives current time in a standard readable format
+    console.log(`[${currentTime}] ${req.method} ${req.originalUrl}`);
+
+    next(); //IMPORTANT:- “Logger has finished its job. Continue to the next middleware / route handler.”
+}
+
 app.get('/', (req, res) => { //req-request, res-response
     res.send('Roadmap Tracker backend is running...')
 });
@@ -96,7 +104,7 @@ app.get('/roadmaps', (req, res) => {
 });
 
 //upgraded route: POST roadmap using real JSON body
-app.post('/roadmaps', (req, res) => {
+app.post('/roadmaps', authMiddleware, (req, res) => {
     const { title, description, difficulty } = req.body; //read data from request body
 
     //validate title
@@ -107,7 +115,7 @@ app.post('/roadmaps', (req, res) => {
     }
 
     if (typeof title !== 'string') {
-        return res.json(400).json({
+        return res.status(400).json({
             message: 'Title must be a string',
         });
     }
@@ -169,7 +177,7 @@ app.post('/roadmaps', (req, res) => {
 
 //dynamic routing + route params + delete flow
 //DELETE roadmap by id
-app.delete('/roadmaps/:id', (req, res) => {
+app.delete('/roadmaps/:id', authMiddleware, (req, res) => {
     const roadmapId = Number(req.params.id); //e.g. req.params.id might be "1", it comes as a string, so convert to number
 
     const roadmapIndex = roadmaps.findIndex((roadmap) => roadmap.id === roadmapId); //searches the array and returns the position of the matching roadmap, otherwise -1
