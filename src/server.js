@@ -97,12 +97,66 @@ app.get('/roadmaps', (req, res) => {
 
 //upgraded route: POST roadmap using real JSON body
 app.post('/roadmaps', (req, res) => {
-    const { title, description } = req.body; //read data from request body
+    const { title, description, difficulty } = req.body; //read data from request body
+
+    //validate title
+    if (title === undefined) {
+        return res.status(400).json({
+            message: 'Title is required',
+        });
+    }
+
+    if (typeof title !== 'string') {
+        return res.json(400).json({
+            message: 'Title must be a string',
+        });
+    }
+
+    const cleanTitle = title.trim();
+
+    if (!cleanTitle) {
+        return res.status(400).json({
+            message: 'Title cannot be empty',
+        });
+    }
+
+    //validate description
+    let cleanDescription = '';
+
+    if (description !== undefined) {
+        if (typeof description !== 'string') {
+            return res.status(400).json({
+                message: 'Description must be a string',
+            });
+        }
+
+        cleanDescription = description.trim();
+    }
+
+    //validate difficulty
+    let cleanDifficulty = null;
+
+    if (difficulty !== undefined) {
+        if (typeof difficulty !== 'number' || !Number.isInteger(difficulty)) {
+            return res.status(400).json({
+                message: 'Difficulty must be an integer between 1 and 5',
+            });
+        }
+
+        if (difficulty < 1 || difficulty > 5) {
+            return res.status(400).json({
+                message: 'Difficulty must be an integer between 1 and 5',
+            });
+        }
+
+        cleanDifficulty = difficulty;
+    }
 
     const newRoadmap = { //So now the roadmap is client-driven, not hardcoded by the server
         id: roadmaps.length + 1,
-        title,
-        description,
+        title: cleanTitle,
+        description: cleanDescription,
+        difficulty: cleanDifficulty,
     }
 
     roadmaps.push(newRoadmap);
@@ -172,15 +226,76 @@ app.post('/signup', async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        //validate input
-        if (!name || !email || !password) {
+        //validate name
+        if (name === undefined) {
             return res.status(400).json({
-                message: 'Name, email, and password are required',
+                message: 'Name is required',
+            });
+        }
+
+        if (typeof name !== 'string') {
+            return res.status(400).json({
+                message: 'Name must be a string',
+            });
+        }
+
+        const cleanName = name.trim();
+
+        if (!cleanName) {
+            return res.status(400).json({
+                message: 'Name cannot be empty',
+            });
+        }
+
+        //validate email
+        if (email === undefined) {
+            return res.status(400).json({
+                message: 'Email is required',
+            });
+        }
+
+        if (typeof email !== 'string') {
+            return res.status(400).json({
+                message: 'Email must be a string',
+            });
+        }
+
+        const cleanEmail = email.trim().toLowerCase();
+
+        if (!cleanEmail) {
+            return res.status(400).json({
+                message: 'Email cannot be empty',
+            });
+        }
+
+        // Basic email format check
+        if (!cleanEmail.includes('@') || !cleanEmail.includes('.')) {
+            return res.status(400).json({
+                message: 'Please enter a valid email address',
+            });
+        }
+
+        //validate password
+        if (password === undefined) {
+            return res.status(400).json({
+                message: 'Password is required',
+            });
+        }
+
+        if (typeof password !== 'string') {
+            return res.status(400).json({
+                message: 'Password must be a string',
+            });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({
+                message: 'Password must be at least 6 characters long',
             });
         }
 
         //Check if email already exists
-        const existingUser = users.find((user) => user.email === email);
+        const existingUser = users.find((user) => user.email === cleanEmail);
 
         if (existingUser) {
             return res.status(409).json({
@@ -194,8 +309,8 @@ app.post('/signup', async (req, res) => {
         //create user
         const newUser = {
             id: users.length + 1,
-            name,
-            email,
+            name: cleanName,
+            email: cleanEmail,
             password: hashedPassword,
             provider: 'local',
         };
