@@ -1,0 +1,299 @@
+const { roadmaps } = require('../data/store');
+const topicRepository = require('../repositories/topicRepository');
+
+const ALLOWED_TOPIC_STATUSES = ['NOT_STARTED', 'DONE', 'STUCK'];
+
+function validateAndNormalizeTopicInput(body, isUpdate = false) {
+    const {
+        title,
+        dayNumber,
+        notes,
+        difficulty,
+        roadmapId,
+        status,
+        timeStarted,
+        timeEnded,
+    } = body;
+
+    const updates = {};
+
+    // ===== title =====
+    if (!isUpdate || title !== undefined) {
+        if (title === undefined) {
+            throw {
+                statusCode: 400,
+                message: 'Title is required',
+            };
+        }
+
+        if (typeof title !== 'string') {
+            throw {
+                statusCode: 400,
+                message: 'Title must be a string',
+            };
+        }
+
+        const cleanTitle = title.trim();
+
+        if (!cleanTitle) {
+            throw {
+                statusCode: 400,
+                message: 'Title cannot be empty',
+            };
+        }
+
+        updates.title = cleanTitle;
+    }
+
+    // ===== dayNumber =====
+    if (!isUpdate || dayNumber !== undefined) {
+        if (dayNumber === undefined) {
+            throw {
+                statusCode: 400,
+                message: 'Day number is required',
+            };
+        }
+
+        if (typeof dayNumber !== 'number' || !Number.isInteger(dayNumber) || dayNumber <= 0) {
+            throw {
+                statusCode: 400,
+                message: 'Day number must be a positive integer',
+            };
+        }
+
+        updates.dayNumber = dayNumber;
+    }
+
+    // ===== notes =====
+    if (notes !== undefined) {
+        if (typeof notes !== 'string') {
+            throw {
+                statusCode: 400,
+                message: 'Notes must be a string',
+            };
+        }
+
+        updates.notes = notes.trim();
+    } else if (!isUpdate) {
+        updates.notes = '';
+    }
+
+    // ===== difficulty =====
+    if (difficulty !== undefined) {
+        if (
+            typeof difficulty !== 'number' ||
+            !Number.isInteger(difficulty) ||
+            difficulty < 1 ||
+            difficulty > 5
+        ) {
+            throw {
+                statusCode: 400,
+                message: 'Difficulty must be an integer between 1 and 5',
+            };
+        }
+
+        updates.difficulty = difficulty;
+    } else if (!isUpdate) {
+        updates.difficulty = null;
+    }
+
+    // ===== roadmapId =====
+    if (!isUpdate || roadmapId !== undefined) {
+        if (roadmapId === undefined) {
+            throw {
+                statusCode: 400,
+                message: 'Roadmap id is required',
+            };
+        }
+
+        if (typeof roadmapId !== 'number' || !Number.isInteger(roadmapId) || roadmapId <= 0) {
+            throw {
+                statusCode: 400,
+                message: 'Roadmap id must be a valid positive integer',
+            };
+        }
+
+        const roadmapExists = roadmaps.some((roadmap) => roadmap.id === roadmapId);
+
+        if (!roadmapExists) {
+            throw {
+                statusCode: 404,
+                message: `Roadmap with id ${roadmapId} not found`,
+            };
+        }
+
+        updates.roadmapId = roadmapId;
+    }
+
+    // ===== status =====
+    if (status !== undefined) {
+        if (typeof status !== 'string') {
+            throw {
+                statusCode: 400,
+                message: 'Status must be a string',
+            };
+        }
+
+        const cleanStatus = status.trim().toUpperCase();
+
+        if (!ALLOWED_TOPIC_STATUSES.includes(cleanStatus)) {
+            throw {
+                statusCode: 400,
+                message: `Status must be one of: ${ALLOWED_TOPIC_STATUSES.join(', ')}`,
+            };
+        }
+
+        updates.status = cleanStatus;
+    } else if (!isUpdate) {
+        updates.status = 'NOT_STARTED';
+    }
+
+    // ===== timeStarted =====
+    if (timeStarted !== undefined) {
+        if (timeStarted !== null && typeof timeStarted !== 'string') {
+            throw {
+                statusCode: 400,
+                message: 'timeStarted must be a string or null',
+            };
+        }
+
+        if (timeStarted !== null && Number.isNaN(new Date(timeStarted).getTime())) {
+            throw {
+                statusCode: 400,
+                message: 'timeStarted must be a valid ISO date string',
+            };
+        }
+
+        updates.timeStarted = timeStarted;
+    } else if (!isUpdate) {
+        updates.timeStarted = null;
+    }
+
+    // ===== timeEnded =====
+    if (timeEnded !== undefined) {
+        if (timeEnded !== null && typeof timeEnded !== 'string') {
+            throw {
+                statusCode: 400,
+                message: 'timeEnded must be a string or null',
+            };
+        }
+
+        if (timeEnded !== null && Number.isNaN(new Date(timeEnded).getTime())) {
+            throw {
+                statusCode: 400,
+                message: 'timeEnded must be a valid ISO date string',
+            };
+        }
+
+        updates.timeEnded = timeEnded;
+    } else if (!isUpdate) {
+        updates.timeEnded = null;
+    }
+
+    return updates;
+}
+
+function createTopic(body) {
+    const topicData = validateAndNormalizeTopicInput(body, false);
+    return topicRepository.createTopic(topicData);
+}
+
+function getTopics(roadmapIdQuery) {
+    if (roadmapIdQuery === undefined) {
+        return topicRepository.getAllTopics();
+    }
+
+    const roadmapId = Number(roadmapIdQuery);
+
+    if (!Number.isInteger(roadmapId) || roadmapId <= 0) {
+        throw {
+            statusCode: 400,
+            message: 'roadmapId query must be a valid positive integer',
+        };
+    }
+
+    return topicRepository.getTopicsByRoadmapId(roadmapId);
+}
+
+function getTopicById(topicIdParam) {
+    const topicId = Number(topicIdParam);
+
+    if (!Number.isInteger(topicId) || topicId <= 0) {
+        throw {
+            statusCode: 400,
+            message: 'Topic id must be a valid positive integer',
+        };
+    }
+
+    const topic = topicRepository.getTopicById(topicId);
+
+    if (!topic) {
+        throw {
+            statusCode: 404,
+            message: `Topic with id ${topicId} not found`,
+        };
+    }
+
+    return topic;
+}
+
+function updateTopic(topicIdParam, body) {
+    const topicId = Number(topicIdParam);
+
+    if (!Number.isInteger(topicId) || topicId <= 0) {
+        throw {
+            statusCode: 400,
+            message: 'Topic id must be a valid positive integer',
+        };
+    }
+
+    const existingTopic = topicRepository.getTopicById(topicId);
+
+    if (!existingTopic) {
+        throw {
+            statusCode: 404,
+            message: `Topic with id ${topicId} not found`,
+        };
+    }
+
+    const updates = validateAndNormalizeTopicInput(body, true);
+
+    if (Object.keys(updates).length === 0) {
+        throw {
+            statusCode: 400,
+            message: 'At least one field must be provided for update',
+        };
+    }
+
+    return topicRepository.updateTopic(topicId, updates);
+}
+
+function deleteTopic(topicIdParam) {
+    const topicId = Number(topicIdParam);
+
+    if (!Number.isInteger(topicId) || topicId <= 0) {
+        throw {
+            statusCode: 400,
+            message: 'Topic id must be a valid positive integer',
+        };
+    }
+
+    const deletedTopic = topicRepository.deleteTopic(topicId);
+
+    if (!deletedTopic) {
+        throw {
+            statusCode: 404,
+            message: `Topic with id ${topicId} not found`,
+        };
+    }
+
+    return deletedTopic;
+}
+
+module.exports = {
+    createTopic,
+    getTopics,
+    getTopicById,
+    updateTopic,
+    deleteTopic,
+};

@@ -185,6 +185,8 @@ async function login(req, res) {
             { expiresIn: '1h' }
         );
 
+        console.log(jwt.decode(token));
+
         res.json({
             message: 'Login successful',
             token,
