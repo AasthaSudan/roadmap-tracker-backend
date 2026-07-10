@@ -521,6 +521,83 @@ app.get('/profile', authMiddleware, (req, res) => {
     });
 });
 
+app.get('/api/v1/topics/:id/details', (req, res) => {
+    res.json({
+        message: 'Request content received successfully',
+        params: req.params,
+        query: req.query,
+        headers: {
+            authorization: req.headers.authorization || null,
+            userAgent: req.headers['user-agent'] || null,
+            learningMode: req.headers.learningMode || null,
+        },
+    });
+});
+
+app.get('/api/v1/github/repos', async (req, res) => {
+    const username = req.query.username;
+
+    if (!username) {
+        return res.status(400).json({
+            message: 'Github username is required',
+        });
+    }
+
+    try {
+        const githubResponse = await axios.get( //backend becomes a client to GitHub’s backend. GitHub returns JSON array of public repos.
+            `https://api.github.com/users/${username}/repos`
+        );
+
+        const repos = githubResponse.data.map((repo) => ({
+            id: repo.id,
+            name: repo.name,
+            full_name: repo.full_name,
+            private: repo.private,
+            html_url: repo.html_url,
+            description: repo.description,
+        }));
+
+        res.json({
+            message: "GitHub repositories fetched successfully",
+            username,
+            total: repos.length,
+            data: repos,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Failed to fetch github repositories',
+            error: error.response?.data || error.message,
+        });
+    }
+});
+
+//demo route to test global error handling
+app.get('/error-demo', (req, res, next) => {
+    try {
+        throw new Error('Intentional demo error from /error-demo route'); //We are deliberately creating an error.“ If an error happens, does our app know where to send it?”
+    } catch (error) {
+        next(error) //pass error to error handling middleware
+    }
+});
+
+//404 Not Found (Catch-all)
+app.use((req, res) => { //It acts as a fallback for any request that doesn’t match above routes
+    res.status(404).json({
+        success: false,
+        message: 'Route not found',
+    });
+});
+
+//Global error handler (catch-all for all sync and async errors)
+app.use((error, req, res, next) => {
+    console.error('Global error handler caught:', error.message);
+
+    res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+    });
+});
+
 app.listen(PORT, () => { //starts the server & tells it to listen for incoming req on that port
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(`Health check endpoint: http://localhost:${PORT}/health`);
