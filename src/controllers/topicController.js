@@ -66,10 +66,27 @@ function deleteTopic(req, res, next) {
     }
 }
 
+function getRelatedCommits(req, res, next) {
+    try {
+        const topicId = Number(req.params.id);
+
+        topicService.getTopicById(topicId);
+
+        res.json({
+            message: 'Related commits fetched successfully',
+            topicId,
+            data: [],
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     createTopic,
     getTopics,
     getTopicById,
     updateTopic,
     deleteTopic,
+    getRelatedCommits
 };

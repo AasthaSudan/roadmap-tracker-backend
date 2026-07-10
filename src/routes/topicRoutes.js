@@ -5,6 +5,7 @@ const {
     getTopicById,
     updateTopic,
     deleteTopic,
+    getRelatedCommits,
 } = require('../controllers/topicController');
 const authMiddleware = require('../middleware/authMiddleware');
 
@@ -16,5 +17,6 @@ router.get('/api/v1/topics', getTopics);
 router.get('/api/v1/topics/:id', getTopicById);
 router.patch('/api/v1/topics/:id', authMiddleware, updateTopic);
 router.delete('/api/v1/topics/:id', authMiddleware, deleteTopic);
+router.get('/api/v1/topics/:id/related-commits', getRelatedCommits);
 
 module.exports = router;
