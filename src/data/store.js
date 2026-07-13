@@ -1,6 +1,6 @@
 // In-memory data store
 // For now we are not using a database, so we keep data in arrays.
-// Later controllers/services/repositories can import these same arrays from one central place.
+// Later controllers / repositories can import these same arrays from one central place.
 
 const roadmaps = [
     {
@@ -15,30 +15,33 @@ const roadmaps = [
     },
 ];
 
-// In-memory user database
-const users = [];
-
-// In-memory topics database
 const topics = [
     {
         id: 1,
+        title: 'Express Basics',
+        dayNumber: 1,
+        notes: 'Understand app, routes, req, res',
+        difficulty: 2,
         roadmapId: 1,
-        title: 'Node.js Intro',
-        notes: 'Understand runtime, V8 and where Node is used',
-        status: 'completed',
+        status: 'DONE',
         timeStarted: '2026-07-01T10:00:00.000Z',
-        timeEnded: '2026-07-01T11:30:00.000Z',
+        timeEnded: '2026-07-01T12:00:00.000Z',
     },
     {
         id: 2,
+        title: 'Middleware',
+        dayNumber: 7,
+        notes: 'Logger middleware and auth middleware practice',
+        difficulty: 3,
         roadmapId: 1,
-        title: 'Express Basics',
-        notes: 'Understand app, routes, req, res',
-        status: 'in-progress',
-        timeStarted: '2026-07-02T09:30:00.000Z',
+        status: 'NOT_STARTED',
+        timeStarted: null,
         timeEnded: null,
     },
 ];
+
+// In-memory user database
+const users = [];
 
 /*
 User shape examples:
@@ -67,6 +70,6 @@ User shape examples:
 
 module.exports = {
     roadmaps,
-    users,
     topics,
+    users,
 };

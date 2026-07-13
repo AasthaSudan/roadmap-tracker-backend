@@ -1,0 +1,20 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client { // Generates the Prisma Client (JavaScript code used to interact with the database)
+  provider = "prisma-client" // Tells Prisma to generate the Prisma Client
+  output   = "../src/generated/prisma" // Location where the generated client is saved
+}
+
+datasource db { // Defines which type of database this project uses
+  provider = "postgresql" // The database type is PostgreSQL
+}
+
+model Roadmap { // Defines the structure of the Roadmap table
+  id          Int     @id @default(autoincrement()) // Primary key; if no id is provided, the database automatically generates the next integer
+  title       String  // Req string col
+  description String  // Req string col
+  difficulty  Int?    // Optional integer col (? means nullable)
+}
