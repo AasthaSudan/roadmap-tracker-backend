@@ -1,9 +1,14 @@
 const topicService = require('../services/topicService');
 const githubService = require('../integrations/githubService');
+const redisClient = require('../config/redis');
+const { getTopicsCacheKey } = require('../utils/cacheKeys');
+const { invalidateTopicsCache } = require('../utils/cacheInvalidation');
 
 async function createTopic(req, res, next) {
     try {
         const newTopic = await topicService.createTopic(req.body);
+
+        await invalidateTopicsCache();
 
         res.status(201).json({
             message: 'Topic created successfully',
@@ -17,6 +22,23 @@ async function createTopic(req, res, next) {
 async function getTopics(req, res, next) {
     try {
         const topics = await topicService.getTopics(req.query.roadmapId);
+        const cacheKey = getTopicsCacheKey(req.query.roadmapId);
+
+        console.log("cache is empty");
+
+        try {
+            await redisClient.set( // storing in redis cache
+                cacheKey,
+                JSON.stringify(topics),
+                {
+                    EX: 300,  //5 mins
+                }
+            );
+
+            console.log("TOPICS STORED IN CACHE");
+        } catch (error) {
+            console.log("FAILED TO STORE CACHE:", error.message);
+        }
 
         res.json({
             message: 'Topics fetched successfully',
@@ -24,6 +46,7 @@ async function getTopics(req, res, next) {
             data: topics,
         });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 }
@@ -48,6 +71,9 @@ async function updateTopic(req, res, next) {
             req.body
         );
 
+        // Clear cache since data changed
+        await invalidateTopicsCache();
+
         res.json({
             message: 'Topic updated successfully',
             data: updatedTopic,
@@ -62,6 +88,8 @@ async function deleteTopic(req, res, next) {
     try {
         const deletedTopic = await topicService.deleteTopic(req.params.id);
 
+        await invalidateTopicsCache();
+
         res.json({
             message: 'Topic deleted successfully',
             data: deletedTopic,
@@ -73,15 +101,13 @@ async function deleteTopic(req, res, next) {
 
 async function getRelatedCommits(req, res, next) {
     try {
-        const topic =
-            await topicService.getTopicById(
-                req.params.id
-            );
+        console.log("ID =", req.params.id);
 
-        const commits =
-            await githubService.getRelatedCommits(
-                topic.title
-            );
+        const topic = await topicService.getTopicById(req.params.id);
+
+        console.log("TOPIC =", topic);
+
+        const commits = await githubService.getRelatedCommits(topic.title);
 
         res.json({
             message: 'Related commits fetched successfully',

@@ -13,7 +13,10 @@ const router = express.Router();
 
 // Topic CRUD routes
 router.post('/topics', authMiddleware, createTopic);
-router.get('/topics', getTopics);
+
+const cacheMiddleware = require('../middleware/cacheMiddleware');
+router.get('/topics', cacheMiddleware, getTopics);
+
 router.get('/topics/:id', getTopicById);
 router.patch('/topics/:id', authMiddleware, updateTopic);
 router.delete('/topics/:id', authMiddleware, deleteTopic);
