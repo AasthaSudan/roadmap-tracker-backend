@@ -12,11 +12,11 @@ const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Topic CRUD routes
-router.post('/api/v1/topics', authMiddleware, createTopic);
-router.get('/api/v1/topics', getTopics);
-router.get('/api/v1/topics/:id', getTopicById);
-router.patch('/api/v1/topics/:id', authMiddleware, updateTopic);
-router.delete('/api/v1/topics/:id', authMiddleware, deleteTopic);
-router.get('/api/v1/topics/:id/related-commits', getRelatedCommits);
+router.post('/topics', authMiddleware, createTopic);
+router.get('/topics', getTopics);
+router.get('/topics/:id', getTopicById);
+router.patch('/topics/:id', authMiddleware, updateTopic);
+router.delete('/topics/:id', authMiddleware, deleteTopic);
+router.get('/topics/:id/related-commits', getRelatedCommits);
 
 module.exports = router;

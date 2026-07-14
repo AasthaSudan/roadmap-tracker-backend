@@ -1,203 +1,77 @@
-const { roadmaps } = require('../data/store');
-
-// ===== Roadmap controllers =====
-// Controllers contain the actual business logic for roadmap routes.
+const roadmapService = require('../services/roadmapService');
 
 // GET all roadmaps
-function getAllRoadmaps(req, res) {
-    res.json({
-        message: 'All roadmaps fetched successfully',
-        total: roadmaps.length, // no. of items
-        data: roadmaps, // actual roadmaps
-    });
+async function getAllRoadmaps(req, res) {
+    try {
+        const roadmaps =
+            await roadmapService.getAllRoadmaps();
+
+        res.json({
+            message: 'All roadmaps fetched successfully',
+            total: roadmaps.length,
+            data: roadmaps,
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: err.message,
+        });
+    }
 }
 
-// POST roadmap using real JSON body
-function createRoadmap(req, res) {
-    const { title, description, difficulty } = req.body; // read data from request body
+// POST roadmap
+async function createRoadmap(req, res) {
+    try {
+        const roadmap =
+            await roadmapService.createRoadmap(req.body);
 
-    // validate title
-    if (title === undefined) {
-        return res.status(400).json({
-            message: 'Title is required',
+        res.status(201).json({
+            message: 'Roadmap created successfully',
+            data: roadmap,
+        });
+    } catch (err) {
+        res.status(400).json({
+            message: err.message,
         });
     }
-
-    if (typeof title !== 'string') {
-        return res.status(400).json({
-            message: 'Title must be a string',
-        });
-    }
-
-    const cleanTitle = title.trim();
-
-    if (!cleanTitle) {
-        return res.status(400).json({
-            message: 'Title cannot be empty',
-        });
-    }
-
-    // validate description
-    let cleanDescription = '';
-
-    if (description !== undefined) {
-        if (typeof description !== 'string') {
-            return res.status(400).json({
-                message: 'Description must be a string',
-            });
-        }
-
-        cleanDescription = description.trim();
-    }
-
-    // validate difficulty
-    let cleanDifficulty = null;
-
-    if (difficulty !== undefined) {
-        if (typeof difficulty !== 'number' || !Number.isInteger(difficulty)) {
-            return res.status(400).json({
-                message: 'Difficulty must be an integer between 1 and 5',
-            });
-        }
-
-        if (difficulty < 1 || difficulty > 5) {
-            return res.status(400).json({
-                message: 'Difficulty must be an integer between 1 and 5',
-            });
-        }
-
-        cleanDifficulty = difficulty;
-    }
-
-    const newRoadmap = { // client-driven roadmap, not hardcoded by server
-        id: roadmaps.length + 1,
-        title: cleanTitle,
-        description: cleanDescription,
-        difficulty: cleanDifficulty,
-    };
-
-    roadmaps.push(newRoadmap);
-
-    res.status(201).json({ // request succeeded and new resource created
-        message: 'Roadmap created successfully',
-        data: newRoadmap,
-    });
 }
 
-// PATCH roadmap by id (partial update)
-function updateRoadmap(req, res) {
-    const roadmapId = Number(req.params.id);
+// PATCH roadmap
+async function updateRoadmap(req, res) {
+    try {
+        const roadmap =
+            await roadmapService.updateRoadmap(
+                Number(req.params.id),
+                req.body
+            );
 
-    // validate route param id
-    if (!Number.isInteger(roadmapId) || roadmapId <= 0) {
-        return res.status(400).json({
-            message: 'Roadmap id must be a valid positive integer',
+        res.json({
+            message: 'Roadmap updated successfully',
+            data: roadmap,
+        });
+    } catch (err) {
+        res.status(400).json({
+            message: err.message,
         });
     }
-
-    // find roadmap to update
-    const roadmap = roadmaps.find((item) => item.id === roadmapId);
-
-    if (!roadmap) {
-        return res.status(404).json({
-            message: `Roadmap with id ${roadmapId} not found`,
-        });
-    }
-
-    const { title, description, difficulty } = req.body;
-
-    // if client sends empty body, nothing to update
-    if (
-        title === undefined &&
-        description === undefined &&
-        difficulty === undefined
-    ) {
-        return res.status(400).json({
-            message: 'At least one field (title, description, difficulty) is required to update roadmap',
-        });
-    }
-
-    // ===== update title only if client sent it =====
-    if (title !== undefined) {
-        if (typeof title !== 'string') {
-            return res.status(400).json({
-                message: 'Title must be a string',
-            });
-        }
-
-        const cleanTitle = title.trim();
-
-        if (!cleanTitle) {
-            return res.status(400).json({
-                message: 'Title cannot be empty',
-            });
-        }
-
-        roadmap.title = cleanTitle;
-    }
-
-    // ===== update description only if client sent it =====
-    if (description !== undefined) {
-        if (typeof description !== 'string') {
-            return res.status(400).json({
-                message: 'Description must be a string',
-            });
-        }
-
-        roadmap.description = description.trim();
-    }
-
-    // ===== update difficulty only if client sent it =====
-    if (difficulty !== undefined) {
-        if (typeof difficulty !== 'number' || !Number.isInteger(difficulty)) {
-            return res.status(400).json({
-                message: 'Difficulty must be an integer between 1 and 5',
-            });
-        }
-
-        if (difficulty < 1 || difficulty > 5) {
-            return res.status(400).json({
-                message: 'Difficulty must be an integer between 1 and 5',
-            });
-        }
-
-        roadmap.difficulty = difficulty;
-    }
-
-    res.json({
-        message: 'Roadmap updated successfully',
-        data: roadmap,
-    });
 }
 
-// DELETE roadmap by id
-function deleteRoadmap(req, res) {
-    const roadmapId = Number(req.params.id); // route params come as strings, so convert id to a number before comparing with numeric roadmap ids
+// DELETE roadmap
+async function deleteRoadmap(req, res) {
+    try {
+        const roadmap =
+            await roadmapService.deleteRoadmap(
+                Number(req.params.id)
+            );
 
-    // validate route param id
-    if (!Number.isInteger(roadmapId) || roadmapId <= 0) {
-        return res.status(400).json({
-            message: 'Roadmap id must be a valid positive integer',
+        res.json({
+            message: 'Roadmap deleted successfully',
+            data: roadmap,
+        });
+    } catch (err) {
+        res.status(400).json({
+            message: err.message,
         });
     }
-
-    // searches the array and returns the position of the matching roadmap
-    // if not found, findIndex returns -1
-    const roadmapIndex = roadmaps.findIndex((roadmap) => roadmap.id === roadmapId);
-
-    if (roadmapIndex === -1) {
-        return res.status(404).json({ // 404 = resource not found
-            message: `Roadmap with id ${roadmapId} not found`,
-        });
-    }
-
-    const deletedRoadmap = roadmaps[roadmapIndex]; // store the roadmap before removing it
-    roadmaps.splice(roadmapIndex, 1); // remove it from the array
-
-    res.json({
-        message: 'Roadmap deleted successfully',
-        data: deletedRoadmap,
-    });
 }
 
 module.exports = {

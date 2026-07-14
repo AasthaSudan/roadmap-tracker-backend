@@ -15,17 +15,6 @@ const authRoutes = require('./routes/authRoutes');
 const githubRoutes = require('./routes/githubRoutes');
 const topicRoutes = require('./routes/topicRoutes');
 
-console.log("notFoundMiddleware:", notFoundMiddleware);
-console.log("errorMiddleware:", errorMiddleware);
-
-console.log({
-    healthRoutes: typeof healthRoutes,
-    roadmapRoutes: typeof roadmapRoutes,
-    authRoutes: typeof authRoutes,
-    githubRoutes: typeof githubRoutes,
-    topicRoutes: typeof topicRoutes
-});
-
 // parse incoming JSON request bodies
 app.use(express.json());
 
@@ -34,10 +23,11 @@ app.use(loggerMiddleware);
 
 // route groups
 app.use('/', healthRoutes);
-app.use('/', roadmapRoutes);
-app.use('/', authRoutes);
-app.use('/', githubRoutes);
-app.use('/', topicRoutes);
+
+app.use('/api/v1', roadmapRoutes);
+app.use('/api/v1', topicRoutes);
+app.use('/api/v1', authRoutes);
+app.use('/api/v1', githubRoutes);
 
 // 404 handler -> runs only if no route matched above
 app.use(notFoundMiddleware);

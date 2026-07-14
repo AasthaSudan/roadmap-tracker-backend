@@ -17,6 +17,4 @@ router.post('/roadmaps', authMiddleware, createRoadmap);
 router.patch('/roadmaps/:id', authMiddleware, updateRoadmap);
 router.delete('/roadmaps/:id', authMiddleware, deleteRoadmap);
 
-console.log('roadmapRoutes loaded with PATCH /roadmaps/:id');
-
 module.exports = router;

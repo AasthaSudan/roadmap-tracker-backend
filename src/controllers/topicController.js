@@ -1,8 +1,9 @@
 const topicService = require('../services/topicService');
+const githubService = require('../integrations/githubService');
 
-function createTopic(req, res, next) {
+async function createTopic(req, res, next) {
     try {
-        const newTopic = topicService.createTopic(req.body);
+        const newTopic = await topicService.createTopic(req.body);
 
         res.status(201).json({
             message: 'Topic created successfully',
@@ -13,9 +14,9 @@ function createTopic(req, res, next) {
     }
 }
 
-function getTopics(req, res, next) {
+async function getTopics(req, res, next) {
     try {
-        const topics = topicService.getTopics(req.query.roadmapId);
+        const topics = await topicService.getTopics(req.query.roadmapId);
 
         res.json({
             message: 'Topics fetched successfully',
@@ -27,9 +28,9 @@ function getTopics(req, res, next) {
     }
 }
 
-function getTopicById(req, res, next) {
+async function getTopicById(req, res, next) {
     try {
-        const topic = topicService.getTopicById(req.params.id);
+        const topic = await topicService.getTopicById(req.params.id);
 
         res.json({
             message: 'Topic fetched successfully',
@@ -40,22 +41,26 @@ function getTopicById(req, res, next) {
     }
 }
 
-function updateTopic(req, res, next) {
+async function updateTopic(req, res, next) {
     try {
-        const updatedTopic = topicService.updateTopic(req.params.id, req.body);
+        const updatedTopic = await topicService.updateTopic(
+            req.params.id,
+            req.body
+        );
 
         res.json({
             message: 'Topic updated successfully',
             data: updatedTopic,
         });
+
     } catch (error) {
         next(error);
     }
 }
 
-function deleteTopic(req, res, next) {
+async function deleteTopic(req, res, next) {
     try {
-        const deletedTopic = topicService.deleteTopic(req.params.id);
+        const deletedTopic = await topicService.deleteTopic(req.params.id);
 
         res.json({
             message: 'Topic deleted successfully',
@@ -66,17 +71,25 @@ function deleteTopic(req, res, next) {
     }
 }
 
-function getRelatedCommits(req, res, next) {
+async function getRelatedCommits(req, res, next) {
     try {
-        const topicId = Number(req.params.id);
+        const topic =
+            await topicService.getTopicById(
+                req.params.id
+            );
 
-        topicService.getTopicById(topicId);
+        const commits =
+            await githubService.getRelatedCommits(
+                topic.title
+            );
 
         res.json({
             message: 'Related commits fetched successfully',
-            topicId,
-            data: [],
+            topicId: topic.id,
+            total: commits.length,
+            data: commits
         });
+
     } catch (error) {
         next(error);
     }

@@ -1,50 +1,60 @@
-const { topics } = require('../data/store');
+const prisma = require('../config/prisma');
 
-function createTopic(topicData) {
-    const newTopic = {
-        id: topics.length ? topics[topics.length - 1].id + 1 : 1,
-        ...topicData,
-    };
 
-    topics.push(newTopic);
-    return newTopic;
+// Create topic
+async function createTopic(topicData) {
+    return prisma.topic.create({
+        data: topicData,
+    });
 }
 
-function getAllTopics() {
-    return topics;
+
+// Get all topics
+async function getAllTopics() {
+    return prisma.topic.findMany();
 }
 
-function getTopicsByRoadmapId(roadmapId) {
-    return topics.filter((topic) => topic.roadmapId === roadmapId);
+
+// Get topics by roadmap
+async function getTopicsByRoadmapId(roadmapId) {
+    return prisma.topic.findMany({
+        where: {
+            roadmapId,
+        },
+    });
 }
 
-function getTopicById(topicId) {
-    return topics.find((topic) => topic.id === topicId) || null;
+
+// Get topic by id
+async function getTopicById(topicId) {
+    return prisma.topic.findUnique({
+        where: {
+            id: topicId,
+        },
+    });
 }
 
-function updateTopic(topicId, updates) {
-    const topic = topics.find((item) => item.id === topicId);
 
-    if (!topic) {
-        return null;
-    }
-
-    Object.assign(topic, updates);
-    return topic;
+// Update topic
+async function updateTopic(topicId, updates) {
+    return prisma.topic.update({
+        where: {
+            id: topicId,
+        },
+        data: updates,
+    });
 }
 
-function deleteTopic(topicId) {
-    const topicIndex = topics.findIndex((topic) => topic.id === topicId);
 
-    if (topicIndex === -1) {
-        return null;
-    }
-
-    const deletedTopic = topics[topicIndex];
-    topics.splice(topicIndex, 1);
-
-    return deletedTopic;
+// Delete topic
+async function deleteTopic(topicId) {
+    return prisma.topic.delete({
+        where: {
+            id: topicId,
+        },
+    });
 }
+
 
 module.exports = {
     createTopic,
