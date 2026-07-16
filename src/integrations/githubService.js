@@ -13,7 +13,6 @@ async function getCommits() {
     }
 
     catch (error) {
-
         throw {
             statusCode: 500,
             message: "Failed to fetch GitHub commits"

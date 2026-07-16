@@ -5,27 +5,22 @@ const redisClient = require('./config/redis');
 
 const PORT = process.env.PORT || 3000;
 
+// Connect Redis first, then start Express
 async function startServer() {
     try {
-
-        await redisClient.connect();
+        await redisClient.connect(); //Establish Redis connection only once
 
         console.log("Redis Connected");
 
-        app.listen(3000, () => {
-            console.log("Server Running");
+        // Start Express server
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+            console.log(`Health check endpoint: http://localhost:${PORT}/health`);
         });
 
     } catch (error) {
-
-        console.log(error);
-
+        console.log("Failed to start server", error);
     }
 }
 
 startServer();
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-    console.log(`Health check endpoint: http://localhost:${PORT}/health`);
-});

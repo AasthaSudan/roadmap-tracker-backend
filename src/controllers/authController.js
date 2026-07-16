@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const axios = require('axios');
 const { users } = require('../data/store');
+const emailService = require("../services/emailService");
 
 // For GitHub OAuth
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
@@ -103,6 +104,16 @@ async function signup(req, res) {
         };
 
         users.push(newUser);
+
+        // Send welcome email
+        try {
+            await emailService.sendWelcomeEmail(
+                newUser.email,
+                newUser.name
+            );
+        } catch (error) {
+            console.error("Failed to send welcome email:", error.message);
+        }
 
         res.status(201).json({
             message: 'User signed up successfully',
