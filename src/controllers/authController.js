@@ -2,14 +2,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const axios = require('axios');
 const { users } = require('../data/store');
-const emailService = require("../services/emailService");
+const emailQueue = require("../queues/emailQueue");
 
 // For GitHub OAuth
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// ===== Signup controller =====
+// Signup controller 
 async function signup(req, res) {
     try {
         const { name, email, password } = req.body;
@@ -107,12 +107,35 @@ async function signup(req, res) {
 
         // Send welcome email
         try {
-            await emailService.sendWelcomeEmail(
-                newUser.email,
-                newUser.name
+            await emailQueue.add(
+                "welcome-email", //job name
+                //payload(data)
+                {
+                    email: newUser.email,
+                    name: newUser.name,
+                },
+                //options
+                {
+                    attempts: 3, //job will be retried 3 times if it fails
+
+                    // exponential backoff with initial delay of 2 seconds
+                    backoff: {
+                        type: "exponential",
+                        delay: 2000,
+                    },
+
+                    delay: 10000, // 10 seconds
+
+                    removeOnComplete: true, //job will be removed from queue once completed
+                    removeOnFail: false, //job will not be removed from queue if it fails
+                }
             );
+
+            console.log("Welcome email job added to queue");
+
         } catch (error) {
-            console.error("Failed to send welcome email:", error.message);
+            console.error(error);
+            throw error;
         }
 
         res.status(201).json({

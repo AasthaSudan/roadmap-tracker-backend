@@ -1,3 +1,5 @@
+//CACHE (node-redis)
+
 const { createClient } = require('redis');
 
 // Create one Redis client(communicate with Redis) for the entire application (Singleton)
