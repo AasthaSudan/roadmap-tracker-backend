@@ -2,6 +2,7 @@ console.log("SERVER.JS RUNNING");
 
 const app = require('./app');
 const redisClient = require('./config/redis');
+const elasticsearchService = require("./services/elasticsearchService");
 
 const PORT = process.env.PORT || 3000;
 
@@ -11,6 +12,8 @@ async function startServer() {
         await redisClient.connect(); //Establish Redis connection only once
 
         console.log("Redis Connected");
+
+        await elasticsearchService.createIndex();
 
         // Start Express server
         app.listen(PORT, () => {

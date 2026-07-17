@@ -1,5 +1,6 @@
 const prisma = require('../config/prisma');
 const topicRepository = require('../repositories/topicRepository');
+const elasticsearchService = require("./elasticsearchService");
 
 const ALLOWED_TOPIC_STATUSES = [
     'NOT_STARTED',
@@ -209,7 +210,11 @@ async function createTopic(body) {
             false
         );
 
-    return topicRepository.createTopic(data);
+    const topic = await topicRepository.createTopic(data);
+
+    await elasticsearchService.indexTopic(topic);
+
+    return topic;
 }
 
 // GET ALL
@@ -239,6 +244,19 @@ async function getTopics(roadmapIdQuery) {
     return topicRepository.getTopicsByRoadmapId(
         roadmapId
     );
+}
+
+async function searchTopics(query) {
+
+    if (!query) {
+        throw {
+            statusCode: 400,
+            message: "Search query is required"
+        };
+    }
+
+    return await elasticsearchService.searchTopics(query);
+
 }
 
 // GET BY ID
@@ -282,10 +300,7 @@ async function updateTopic(id, body) {
     const topicId = Number(id);
 
 
-    const existing =
-        await topicRepository.getTopicById(topicId);
-
-
+    const existing = await topicRepository.getTopicById(topicId);
 
     if (!existing) {
 
@@ -295,19 +310,13 @@ async function updateTopic(id, body) {
         };
     }
 
+    const updates = await validateAndNormalizeTopicInput(body, true);
 
+    const updatedTopic = await topicRepository.updateTopic(topicId, updates);
 
-    const updates =
-        await validateAndNormalizeTopicInput(
-            body,
-            true
-        );
+    await elasticsearchService.updateTopic(updatedTopic);
 
-
-    return topicRepository.updateTopic(
-        topicId,
-        updates
-    );
+    return updatedTopic;
 }
 
 // DELETE
@@ -318,7 +327,11 @@ async function deleteTopic(id) {
 
     try {
 
-        return await topicRepository.deleteTopic(topicId);
+        const deletedTopic = await topicRepository.deleteTopic(topicId);
+
+        await elasticsearchService.deleteTopic(topicId);
+
+        return deletedTopic;
 
     }
     catch (error) {
@@ -341,5 +354,6 @@ module.exports = {
     getTopics,
     getTopicById,
     updateTopic,
-    deleteTopic
+    deleteTopic,
+    searchTopics,
 };

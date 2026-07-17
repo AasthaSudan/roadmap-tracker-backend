@@ -6,6 +6,7 @@ const {
     updateTopic,
     deleteTopic,
     getRelatedCommits,
+    searchTopics,
 } = require('../controllers/topicController');
 const authMiddleware = require('../middleware/authMiddleware');
 
@@ -16,6 +17,8 @@ router.post('/topics', authMiddleware, createTopic);
 
 const cacheMiddleware = require('../middleware/cacheMiddleware');
 router.get('/topics', cacheMiddleware, getTopics);
+
+router.get("/topics/search", searchTopics);
 
 router.get('/topics/:id', getTopicById);
 router.patch('/topics/:id', authMiddleware, updateTopic);

@@ -51,6 +51,27 @@ async function getTopics(req, res, next) {
     }
 }
 
+async function searchTopics(req, res, next) {
+
+    try {
+
+        const { q } = req.query;
+
+        const results =
+            await topicService.searchTopics(q);
+
+        res.json({
+            message: "Search completed successfully",
+            total: results.length,
+            data: results,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+
+}
+
 async function getTopicById(req, res, next) {
     try {
         const topic = await topicService.getTopicById(req.params.id);
@@ -127,5 +148,6 @@ module.exports = {
     getTopicById,
     updateTopic,
     deleteTopic,
-    getRelatedCommits
+    getRelatedCommits,
+    searchTopics,
 };
