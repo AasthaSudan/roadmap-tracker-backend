@@ -21,6 +21,4 @@ router.get('/auth/github/callback', githubCallback);
 // protected profile
 router.get('/profile', authMiddleware, getProfile);
 
-console.log("AUTH ROUTES LOADED");
-
 module.exports = router;

@@ -1,12 +1,15 @@
-//CACHE (node-redis)
+const { createClient } = require("redis");
+const config = require("./env");
 
-const { createClient } = require('redis');
+const client = createClient({ //create one redis client for entire application
+    socket: {
+        host: config.redis.host,
+        port: config.redis.port,
+    },
+});
 
-// Create one Redis client(communicate with Redis) for the entire application (Singleton)
-const client = createClient();
-
-client.on('error', (err) => {
-    console.log('Redis Error:', err);
+client.on("error", (err) => {
+    console.log("Redis Error:", err);
 });
 
 module.exports = client;

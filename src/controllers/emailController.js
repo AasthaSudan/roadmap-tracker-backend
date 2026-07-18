@@ -1,10 +1,11 @@
 const emailService = require("../services/emailService");
+const config = require("../config/env");
 
 async function sendTestEmail(req, res, next) {
     try {
 
         const info = await emailService.sendWelcomeEmail(
-            process.env.SMTP_USER,
+            config.smtp.user,
             "Aastha Sudan"
         );
 
@@ -24,7 +25,7 @@ async function sendTopicEmail(req, res, next) {
     try {
 
         const info = await emailService.sendTopicCreatedEmail(
-            process.env.SMTP_USER,
+            config.smtp.user,
             "Aastha Sudan",
             "Redis Caching"
         );

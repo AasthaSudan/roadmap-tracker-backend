@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const config = require("../config/env");
 
 // middleware to authenticate token
 function authMiddleware(req, res, next) {
@@ -22,7 +23,7 @@ function authMiddleware(req, res, next) {
         console.log("Received Token:", token);
 
         // verify token using the same JWT secret stored in .env
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const decodedToken = jwt.verify(token, config.jwtSecret);
 
         console.log("Decoded Token:", decodedToken);
 

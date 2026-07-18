@@ -1,11 +1,11 @@
 //BullMQ (ioredis) - for background jobs
 
 const IORedis = require("ioredis");
+const config = require("./env");
 
 const bullRedis = new IORedis({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-
+    host: config.redis.host,
+    port: config.redis.port,
     maxRetriesPerRequest: null,
 });
 

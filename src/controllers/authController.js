@@ -4,10 +4,11 @@ const axios = require('axios');
 const { users } = require('../data/store');
 const emailQueue = require("../queues/emailQueue");
 
-// For GitHub OAuth
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
-const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
-const JWT_SECRET = process.env.JWT_SECRET;
+const config = require("../config/env");
+
+const GITHUB_CLIENT_ID = config.github.clientId;
+const GITHUB_CLIENT_SECRET = config.github.clientSecret;
+const JWT_SECRET = config.jwtSecret;
 
 // Signup controller 
 async function signup(req, res) {

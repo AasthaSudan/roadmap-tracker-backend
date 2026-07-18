@@ -1,19 +1,27 @@
-const redisClient = require('../config/redis');
+const redisClient = require("../config/redis");
 
 async function invalidateTopicsCache() {
+    // Delete topics cache
+    const topicKeys = await redisClient.keys("topics:*"); //find all keys starting with topics
 
-    const keys = await redisClient.keys('topics*'); //find all keys starting with topics
+    console.log("TOPIC CACHE KEYS =", topicKeys);
 
-    console.log("CACHE KEYS BEFORE DELETE =", keys);
+    if (topicKeys.length > 0) {
+        await redisClient.del(...topicKeys);
+    }
 
-    if (keys.length > 0) {
-        await redisClient.del(keys);
+    // Delete search cache
+    const searchKeys = await redisClient.keys("search:*");
+
+    console.log("SEARCH CACHE KEYS =", searchKeys);
+
+    if (searchKeys.length > 0) {
+        await redisClient.del(...searchKeys);
     }
 
     console.log("CACHE INVALIDATED");
-
 }
 
 module.exports = {
-    invalidateTopicsCache
+    invalidateTopicsCache,
 };

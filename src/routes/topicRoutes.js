@@ -18,8 +18,7 @@ router.post('/topics', authMiddleware, createTopic);
 const cacheMiddleware = require('../middleware/cacheMiddleware');
 router.get('/topics', cacheMiddleware, getTopics);
 
-router.get("/topics/search", searchTopics);
-
+router.get('/topics/search', searchTopics);
 router.get('/topics/:id', getTopicById);
 router.patch('/topics/:id', authMiddleware, updateTopic);
 router.delete('/topics/:id', authMiddleware, deleteTopic);

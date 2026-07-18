@@ -1,15 +1,16 @@
 const nodemailer = require("nodemailer");
+const config = require("./env");
 
-const transporter = nodemailer.createTransport({ //creates an object capable of sending emails using SMTP
+const transporter = nodemailer.createTransport({
 
-    host: process.env.SMTP_HOST, //the smpt server that will send emails (e.g. Gmail's SMTP server)
-    port: Number(process.env.SMTP_PORT), //the port to connect to the SMTP server (587 is standard for TLS)
+    host: config.smtp.host,
+    port: config.smtp.port,
 
     secure: false, //false means TLS is used
 
-    auth: { //authentication (login) credentials for the SMTP server
-        user: process.env.SMTP_USER, //your email address
-        pass: process.env.SMTP_PASS //your email password
+    auth: {
+        user: config.smtp.user,
+        pass: config.smtp.pass
 
     }
 });

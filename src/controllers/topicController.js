@@ -1,8 +1,8 @@
-const topicService = require('../services/topicService');
-const githubService = require('../integrations/githubService');
-const redisClient = require('../config/redis');
-const { getTopicsCacheKey } = require('../utils/cacheKeys');
-const { invalidateTopicsCache } = require('../utils/cacheInvalidation');
+const topicService = require("../services/topicService");
+const githubService = require("../integrations/githubService");
+const redisClient = require("../config/redis");
+const { getTopicsCacheKey } = require("../utils/cacheKeys");
+const { invalidateTopicsCache } = require("../utils/cacheInvalidation");
 
 async function createTopic(req, res, next) {
     try {
@@ -11,7 +11,7 @@ async function createTopic(req, res, next) {
         await invalidateTopicsCache();
 
         res.status(201).json({
-            message: 'Topic created successfully',
+            message: "Topic created successfully",
             data: newTopic,
         });
     } catch (error) {
@@ -21,44 +21,84 @@ async function createTopic(req, res, next) {
 
 async function getTopics(req, res, next) {
     try {
-        const topics = await topicService.getTopics(req.query.roadmapId);
         const cacheKey = getTopicsCacheKey(req.query.roadmapId);
 
-        console.log("cache is empty");
+        // Check cache first
+        const cachedTopics = await redisClient.get(cacheKey);
 
-        try {
-            await redisClient.set( // storing in redis cache
-                cacheKey,
-                JSON.stringify(topics),
-                {
-                    EX: 300,  //5 mins
-                }
-            );
+        if (cachedTopics) {
+            console.log("TOPICS CACHE HIT");
 
-            console.log("TOPICS STORED IN CACHE");
-        } catch (error) {
-            console.log("FAILED TO STORE CACHE:", error.message);
+            const topics = JSON.parse(cachedTopics);
+
+            return res.json({
+                message: "Topics fetched successfully (from cache)",
+                total: topics.length,
+                data: topics,
+            });
         }
 
+        console.log("TOPICS CACHE MISS");
+
+        const topics = await topicService.getTopics(req.query.roadmapId);
+
+        await redisClient.set(
+            cacheKey,
+            JSON.stringify(topics),
+            {
+                EX: 300,
+            }
+        );
+
+        console.log("TOPICS STORED IN CACHE");
+
         res.json({
-            message: 'Topics fetched successfully',
+            message: "Topics fetched successfully",
             total: topics.length,
             data: topics,
         });
+
     } catch (error) {
-        console.log(error);
         next(error);
     }
 }
 
 async function searchTopics(req, res, next) {
-
     try {
 
         const { q } = req.query;
 
-        const results =
-            await topicService.searchTopics(q);
+        const cacheKey = `search:${q.toLowerCase()}`;
+
+        // Check Redis first
+        const cachedResults = await redisClient.get(cacheKey);
+
+        if (cachedResults) {
+
+            console.log("SEARCH CACHE HIT");
+
+            const results = JSON.parse(cachedResults);
+
+            return res.json({
+                message: "Search completed successfully (from cache)",
+                total: results.length,
+                data: results,
+            });
+        }
+
+        console.log("SEARCH CACHE MISS");
+
+        const results = await topicService.searchTopics(q);
+
+        await redisClient.set(
+            cacheKey,
+            JSON.stringify(results),
+            {
+                EX: 300,
+            }
+        );
+
+        console.log("SEARCH RESULTS STORED IN CACHE");
 
         res.json({
             message: "Search completed successfully",
@@ -69,7 +109,6 @@ async function searchTopics(req, res, next) {
     } catch (error) {
         next(error);
     }
-
 }
 
 async function getTopicById(req, res, next) {
@@ -77,9 +116,10 @@ async function getTopicById(req, res, next) {
         const topic = await topicService.getTopicById(req.params.id);
 
         res.json({
-            message: 'Topic fetched successfully',
+            message: "Topic fetched successfully",
             data: topic,
         });
+
     } catch (error) {
         next(error);
     }
@@ -87,16 +127,16 @@ async function getTopicById(req, res, next) {
 
 async function updateTopic(req, res, next) {
     try {
+
         const updatedTopic = await topicService.updateTopic(
             req.params.id,
             req.body
         );
 
-        // Clear cache since data changed
         await invalidateTopicsCache();
 
         res.json({
-            message: 'Topic updated successfully',
+            message: "Topic updated successfully",
             data: updatedTopic,
         });
 
@@ -107,14 +147,16 @@ async function updateTopic(req, res, next) {
 
 async function deleteTopic(req, res, next) {
     try {
+
         const deletedTopic = await topicService.deleteTopic(req.params.id);
 
         await invalidateTopicsCache();
 
         res.json({
-            message: 'Topic deleted successfully',
+            message: "Topic deleted successfully",
             data: deletedTopic,
         });
+
     } catch (error) {
         next(error);
     }
@@ -122,6 +164,7 @@ async function deleteTopic(req, res, next) {
 
 async function getRelatedCommits(req, res, next) {
     try {
+
         console.log("ID =", req.params.id);
 
         const topic = await topicService.getTopicById(req.params.id);
@@ -131,10 +174,10 @@ async function getRelatedCommits(req, res, next) {
         const commits = await githubService.getRelatedCommits(topic.title);
 
         res.json({
-            message: 'Related commits fetched successfully',
+            message: "Related commits fetched successfully",
             topicId: topic.id,
             total: commits.length,
-            data: commits
+            data: commits,
         });
 
     } catch (error) {

@@ -7,8 +7,8 @@ const {
 
 const router = express.Router();
 
-router.get("/test-email", sendTestEmail);
+router.get("/test", sendTestEmail);
 
-router.get("/test-topic-email", sendTopicEmail);
+router.get("/topic", sendTopicEmail);
 
 module.exports = router;

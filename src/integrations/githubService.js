@@ -1,6 +1,6 @@
-const axios = require('axios');
-const githubMatcher = require('./githubMatcher');
-const githubConfig = require('../config/github');
+const axios = require('axios'); // used to make http requests to the github api
+const githubMatcher = require('./githubMatcher'); // used to match the topic title with the commit message
+const githubConfig = require('../config/github'); // contains the github repository details
 
 async function getCommits() {
     try {
@@ -13,9 +13,41 @@ async function getCommits() {
     }
 
     catch (error) {
+
+        if (error.response) {
+
+            switch (error.response.status) {
+
+                case 401:
+                    throw {
+                        statusCode: 401,
+                        message: "Invalid GitHub credentials"
+                    };
+
+                case 403:
+                    throw {
+                        statusCode: 403,
+                        message: "GitHub API rate limit exceeded"
+                    };
+
+                case 404:
+                    throw {
+                        statusCode: 404,
+                        message: "GitHub repository not found"
+                    };
+
+                default:
+                    throw {
+                        statusCode: error.response.status,
+                        message: "GitHub API returned an error"
+                    };
+            }
+
+        }
+
         throw {
-            statusCode: 500,
-            message: "Failed to fetch GitHub commits"
+            statusCode: 502,
+            message: "Unable to reach GitHub"
         };
     }
 }

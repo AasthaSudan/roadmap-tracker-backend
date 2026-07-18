@@ -4,7 +4,9 @@ const app = require('./app');
 const redisClient = require('./config/redis');
 const elasticsearchService = require("./services/elasticsearchService");
 
-const PORT = process.env.PORT || 3000;
+const config = require("./config/env");
+
+const PORT = config.port;
 
 // Connect Redis first, then start Express
 async function startServer() {

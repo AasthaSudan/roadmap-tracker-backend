@@ -25,11 +25,11 @@ app.use(loggerMiddleware);
 // route groups
 app.use('/', healthRoutes);
 
-app.use('/api/v1', roadmapRoutes);
+app.use('/api/v1/', roadmapRoutes);
 app.use('/api/v1', topicRoutes);
 app.use('/api/v1', authRoutes);
 app.use('/api/v1', githubRoutes);
-app.use('/api/v1', emailRoutes);
+app.use('/api/v1/email', emailRoutes);
 
 // 404 handler -> runs only if no route matched above
 app.use(notFoundMiddleware);
