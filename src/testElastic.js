@@ -1,14 +1,15 @@
 const client = require("./config/elasticsearch");
+const logger = require("../utils/logger");
 
 async function testConnection() {
     try {
         const response = await client.info();
 
-        console.log("Connected Successfully!");
-        console.log(response);
+        logger.info("Connected Successfully!");
+        logger.info(response);
     } catch (error) {
-        console.error("Connection Failed");
-        console.error(error);
+        logger.error("Connection Failed");
+        logger.error(error);
     }
 }
 

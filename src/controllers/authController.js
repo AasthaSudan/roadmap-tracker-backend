@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const axios = require('axios');
 const { users } = require('../data/store');
 const emailQueue = require("../queues/emailQueue");
+const logger = require("../utils/logger");
 
 const config = require("../config/env");
 
@@ -132,10 +133,10 @@ async function signup(req, res) {
                 }
             );
 
-            console.log("Welcome email job added to queue");
+            logger.info("Welcome email job added to queue");
 
         } catch (error) {
-            console.error(error);
+            logger.error(error);
             throw error;
         }
 
@@ -220,7 +221,7 @@ async function login(req, res) {
             { expiresIn: '1h' }
         );
 
-        console.log(jwt.decode(token));
+        logger.info(jwt.decode(token));
 
         res.json({
             message: 'Login successful',

@@ -1,5 +1,3 @@
-console.log("ROADMAP ROUTE FILE EXECUTED");
-
 const express = require('express');
 const {
     getAllRoadmaps,

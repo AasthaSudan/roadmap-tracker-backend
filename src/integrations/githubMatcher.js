@@ -30,7 +30,7 @@ function isCommitRelated(topicTitle, commitMessage) {
 
     const matchScore = matchedWords / topicKeywords.length;
 
-    console.log({
+    logger.info({
         topicTitle,
         topicKeywords,
         commitMessage,

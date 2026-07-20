@@ -1,6 +1,7 @@
 const prisma = require('../config/prisma');
 const topicRepository = require('../repositories/topicRepository');
 const elasticsearchService = require("./elasticsearchService");
+const logger = require("../utils/logger");
 
 const ALLOWED_TOPIC_STATUSES = [
     'NOT_STARTED',
@@ -139,7 +140,6 @@ async function validateAndNormalizeTopicInput(body, isUpdate = false) {
             };
         }
 
-
         const cleanStatus =
             status.trim().toUpperCase();
 
@@ -263,11 +263,11 @@ async function searchTopics(query) {
 
 async function getTopicById(id) {
 
-    console.log("Incoming id:", id);
+    logger.info("Incoming id:", id);
 
     const topicId = Number(id);
 
-    console.log("Converted id:", topicId);
+    logger.info("Converted id:", topicId);
 
     if (!Number.isInteger(topicId)) {
 
@@ -280,7 +280,7 @@ async function getTopicById(id) {
     const topic =
         await topicRepository.getTopicById(topicId);
 
-    console.log("Topic from DB:", topic);
+    logger.info("Topic from DB:", topic);
 
     if (!topic) {
         throw {

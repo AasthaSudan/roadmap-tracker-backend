@@ -11,7 +11,7 @@ async function sendWelcomeEmail(email, name) {
         html: welcomeEmailTemplate(name),
     });
 
-    console.log("Welcome email sent");
+    logger.info("Welcome email sent");
 
     return info;
 }
@@ -24,7 +24,7 @@ async function sendTopicCreatedEmail(email, name, topicTitle) {
         html: topicCreatedTemplate(name, topicTitle),
     });
 
-    console.log("Topic created email sent");
+    logger.info("Topic created email sent");
 
     return info;
 }

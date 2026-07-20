@@ -1,4 +1,5 @@
 const client = require("../config/elasticsearch");
+const logger = require("../utils/logger");
 
 const INDEX_NAME = "topics";
 
@@ -9,7 +10,7 @@ async function createIndex() {
     });
 
     if (exists) {
-        console.log("Topics index already exists.");
+        logger.info("Topics index already exists.");
         return;
     }
 
@@ -17,7 +18,7 @@ async function createIndex() {
         index: INDEX_NAME,
     });
 
-    console.log("Topics index created successfully.");
+    logger.info("Topics index created successfully.");
 }
 
 // Index a Topic
@@ -37,7 +38,7 @@ async function indexTopic(topic) {
 
     await client.indices.refresh({ index: INDEX_NAME });
 
-    console.log(`Topic ${topic.id} indexed successfully.`);
+    logger.info(`Topic ${topic.id} indexed successfully.`);
 }
 
 // Search Topics
@@ -76,7 +77,7 @@ async function updateTopic(topic) {
 
     await client.indices.refresh({ index: INDEX_NAME });
 
-    console.log(`Topic ${topic.id} updated in Elasticsearch.`);
+    logger.info(`Topic ${topic.id} updated in Elasticsearch.`);
 }
 
 //Delete Topic from Elasticsearch
@@ -87,9 +88,9 @@ async function deleteTopic(id) {
             id: id.toString(),
         });
 
-        console.log(`Topic ${id} removed from Elasticsearch.`);
+        logger.info(`Topic ${id} removed from Elasticsearch.`);
     } catch (error) {
-        console.log("Elasticsearch delete skipped:", error.message);
+        logger.info("Elasticsearch delete skipped:", error.message);
     }
 }
 
@@ -106,7 +107,7 @@ async function deleteIndex() {
         index: INDEX_NAME,
     });
 
-    console.log("Topics index deleted.");
+    logger.info("Topics index deleted.");
 }
 
 module.exports = {

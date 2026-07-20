@@ -3,6 +3,7 @@ const githubService = require("../integrations/githubService");
 const redisClient = require("../config/redis");
 const { getTopicsCacheKey } = require("../utils/cacheKeys");
 const { invalidateTopicsCache } = require("../utils/cacheInvalidation");
+const logger = require("../utils/logger");
 
 async function createTopic(req, res, next) {
     try {
@@ -27,7 +28,7 @@ async function getTopics(req, res, next) {
         const cachedTopics = await redisClient.get(cacheKey);
 
         if (cachedTopics) {
-            console.log("TOPICS CACHE HIT");
+            logger.info("TOPICS CACHE HIT");
 
             const topics = JSON.parse(cachedTopics);
 
@@ -38,7 +39,7 @@ async function getTopics(req, res, next) {
             });
         }
 
-        console.log("TOPICS CACHE MISS");
+        logger.info("TOPICS CACHE MISS");
 
         const topics = await topicService.getTopics(req.query.roadmapId);
 
@@ -50,7 +51,7 @@ async function getTopics(req, res, next) {
             }
         );
 
-        console.log("TOPICS STORED IN CACHE");
+        logger.info("TOPICS STORED IN CACHE");
 
         res.json({
             message: "Topics fetched successfully",
@@ -75,7 +76,7 @@ async function searchTopics(req, res, next) {
 
         if (cachedResults) {
 
-            console.log("SEARCH CACHE HIT");
+            logger.info("SEARCH CACHE HIT");
 
             const results = JSON.parse(cachedResults);
 
@@ -86,7 +87,7 @@ async function searchTopics(req, res, next) {
             });
         }
 
-        console.log("SEARCH CACHE MISS");
+        logger.info("SEARCH CACHE MISS");
 
         const results = await topicService.searchTopics(q);
 
@@ -98,7 +99,7 @@ async function searchTopics(req, res, next) {
             }
         );
 
-        console.log("SEARCH RESULTS STORED IN CACHE");
+        logger.info("SEARCH RESULTS STORED IN CACHE");
 
         res.json({
             message: "Search completed successfully",
@@ -165,11 +166,11 @@ async function deleteTopic(req, res, next) {
 async function getRelatedCommits(req, res, next) {
     try {
 
-        console.log("ID =", req.params.id);
+        logger.info("ID =", req.params.id);
 
         const topic = await topicService.getTopicById(req.params.id);
 
-        console.log("TOPIC =", topic);
+        logger.info("TOPIC =", topic);
 
         const commits = await githubService.getRelatedCommits(topic.title);
 

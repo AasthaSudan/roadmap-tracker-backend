@@ -1,6 +1,7 @@
 const axios = require('axios'); // used to make http requests to the github api
 const githubMatcher = require('./githubMatcher'); // used to match the topic title with the commit message
 const githubConfig = require('../config/github'); // contains the github repository details
+const logger = require("../utils/logger");
 
 async function getCommits() {
     try {
@@ -57,10 +58,10 @@ async function getRelatedCommits(topicTitle) {
     const commits =
         await getCommits();
 
-    console.log("Topic:", topicTitle);
+    logger.info("Topic:", topicTitle);
 
     commits.forEach(commit => {
-        console.log(commit.commit.message);
+        logger.info(commit.commit.message);
     });
 
     const relatedCommits =
@@ -71,7 +72,7 @@ async function getRelatedCommits(topicTitle) {
                 commit.commit.message
             );
 
-            console.log({
+            logger.info({
                 message: commit.commit.message,
                 matched: result
             });

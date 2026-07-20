@@ -20,12 +20,12 @@ function authMiddleware(req, res, next) {
     }
 
     try {
-        console.log("Received Token:", token);
+        logger.info("Received Token:", token);
 
         // verify token using the same JWT secret stored in .env
         const decodedToken = jwt.verify(token, config.jwtSecret);
 
-        console.log("Decoded Token:", decodedToken);
+        logger.info("Decoded Token:", decodedToken);
 
         // Attach decoded user info to request
         // This lets protected route handlers access the logged-in user's data using req.user
@@ -34,8 +34,8 @@ function authMiddleware(req, res, next) {
         next(); // “Auth check passed. Continue to the actual route handler.”
         // Without next(), request would get stuck in middleware.
     } catch (error) {
-        console.log("Received Token:", token);
-        console.log("JWT VERIFY ERROR:", error.message);
+        logger.info("Received Token:", token);
+        logger.info("JWT VERIFY ERROR:", error.message);
 
         return res.status(401).json({
             message: 'Invalid or expired token.',

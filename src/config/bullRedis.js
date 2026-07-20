@@ -1,4 +1,5 @@
 //BullMQ (ioredis) - for background jobs
+const logger = require("../utils/logger");
 
 const IORedis = require("ioredis");
 const config = require("./env");
@@ -10,11 +11,11 @@ const bullRedis = new IORedis({
 });
 
 bullRedis.on("connect", () => {
-    console.log("BullMQ Redis Connected");
+    logger.info("BullMQ Redis Connected");
 });
 
 bullRedis.on("error", (err) => {
-    console.error("BullMQ Redis Error:", err);
+    logger.error("BullMQ Redis Error:", err);
 });
 
 module.exports = bullRedis;

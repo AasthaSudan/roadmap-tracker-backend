@@ -1,6 +1,7 @@
 require("dotenv").config();
+const logger = require("../utils/logger");
 
-console.log(process.env.REDIS_PORT);
+logger.info(process.env.REDIS_PORT);
 
 module.exports = {
 

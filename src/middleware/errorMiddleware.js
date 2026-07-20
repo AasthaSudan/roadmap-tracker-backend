@@ -1,11 +1,17 @@
+const logger = require("../utils/logger");
+
 function errorMiddleware(error, req, res, next) {
-    console.error('Global error handler caught:', error);
+    logger.error({
+        message: error.message,
+        stack: error.stack,
+        method: req.method,
+        url: req.originalUrl,
+        statusCode: error.statusCode || 500,
+    });
 
-    const statusCode = error.statusCode || 500;
-
-    res.status(statusCode).json({
+    res.status(error.statusCode || 500).json({
         success: false,
-        message: error.message || 'Internal server error',
+        message: error.message || "Internal Server Error",
     });
 }
 

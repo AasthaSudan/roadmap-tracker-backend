@@ -14,7 +14,7 @@ async function startSchedulers() {
         }
     );
 
-    console.log("Daily Roadmap Reminder Scheduler Started");
+    logger.info("Daily Roadmap Reminder Scheduler Started");
 }
 
 module.exports = startSchedulers;
