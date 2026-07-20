@@ -1,17 +1,42 @@
-// ===== Basic health / inspection controllers =====
-// These controllers handle simple request/response routes that help us
-// check server status and inspect incoming request data.
+const prisma = require("../config/prisma");
+const elasticClient = require("../config/elasticsearch");
+const redisClient = require("../config/redis");
 
 function getHome(req, res) { // req-request, res-response
     res.send('Roadmap Tracker backend is running...');
 }
 
 function getHealth(req, res) {
-    res.json({ // sends a JSON response
-        status: 'ok',
-        message: 'Server is healthy',
+    res.status(200).json({
+        status: "OK",
+        uptime: process.uptime(),
         timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || "development",
+        memory: process.memoryUsage(),
     });
+}
+
+async function getReady(req, res) {
+    try {
+        await prisma.$queryRaw`SELECT 1`;
+        await redisClient.ping();
+        await elasticClient.ping();
+
+        return res.status(200).json({
+            status: "READY",
+            services: {
+                database: "UP",
+                redis: "UP",
+                elasticsearch: "UP",
+            },
+        });
+
+    } catch (error) {
+        return res.status(503).json({
+            status: "NOT_READY",
+            error: error.message,
+        });
+    }
 }
 
 function inspectRequest(req, res) { // inspect -> lets your server show what request it received (method, url, headers)
@@ -50,6 +75,7 @@ function getTopicDetails(req, res) {
 module.exports = {
     getHome,
     getHealth,
+    getReady,
     inspectRequest,
     inspectBody,
     getTopicDetails,

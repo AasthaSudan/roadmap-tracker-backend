@@ -57,3 +57,147 @@
 {"level":"info","message":"Health check endpoint: http://localhost:3000/health","timestamp":"2026-07-20 17:29:05"}
 {"level":"info","message":"[2026-07-20T11:59:09.367Z] GET /ready","timestamp":"2026-07-20 17:29:09"}
 {"level":"info","message":"::1 - - [20/Jul/2026:11:59:09 +0000] \"GET /ready HTTP/1.1\" 200 18 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-20 17:29:09"}
+{"level":"info","message":"6379","timestamp":"2026-07-21 00:51:12"}
+{"level":"info","message":"Redis Connected","timestamp":"2026-07-21 00:51:12"}
+{"level":"info","message":"BullMQ Redis Connected","timestamp":"2026-07-21 00:51:12"}
+{"level":"info","message":"Redis Connected","timestamp":"2026-07-21 00:51:12"}
+{"level":"info","message":"Topics index already exists.","timestamp":"2026-07-21 00:51:12"}
+{"level":"info","message":"Server is running on http://localhost:3000","timestamp":"2026-07-21 00:51:12"}
+{"level":"info","message":"Health endpoint: http://localhost:3000/health","timestamp":"2026-07-21 00:51:12"}
+{"level":"info","message":"Readiness endpoint: http://localhost:3000/ready","timestamp":"2026-07-21 00:51:12"}
+{"level":"info","message":"[2026-07-20T19:21:39.649Z] GET /health","timestamp":"2026-07-21 00:51:39"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:21:39 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:51:39"}
+{"level":"info","message":"SIGINT received. Starting graceful shutdown...","timestamp":"2026-07-21 00:53:48"}
+{"level":"info","message":"HTTP server closed.","timestamp":"2026-07-21 00:53:48"}
+{"level":"info","message":"Prisma disconnected.","timestamp":"2026-07-21 00:53:48"}
+{"level":"info","message":"6379","timestamp":"2026-07-21 00:53:50"}
+{"level":"info","message":"Redis Connected","timestamp":"2026-07-21 00:53:50"}
+{"level":"info","message":"BullMQ Redis Connected","timestamp":"2026-07-21 00:53:50"}
+{"level":"info","message":"Redis Connected","timestamp":"2026-07-21 00:53:50"}
+{"level":"info","message":"Topics index already exists.","timestamp":"2026-07-21 00:53:50"}
+{"level":"info","message":"Server is running on http://localhost:3000","timestamp":"2026-07-21 00:53:50"}
+{"level":"info","message":"Health endpoint: http://localhost:3000/health","timestamp":"2026-07-21 00:53:50"}
+{"level":"info","message":"Readiness endpoint: http://localhost:3000/ready","timestamp":"2026-07-21 00:53:50"}
+{"level":"info","message":"[2026-07-20T19:23:53.609Z] GET /health","timestamp":"2026-07-21 00:53:53"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:23:53 +0000] \"GET /health HTTP/1.1\" 200 211 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:53:53"}
+{"level":"info","message":"[2026-07-20T19:23:56.347Z] GET /health","timestamp":"2026-07-21 00:53:56"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:23:56 +0000] \"GET /health HTTP/1.1\" 200 210 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:53:56"}
+{"level":"info","message":"[2026-07-20T19:23:57.298Z] GET /health","timestamp":"2026-07-21 00:53:57"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:23:57 +0000] \"GET /health HTTP/1.1\" 200 211 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:53:57"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:23:58 +0000] \"GET /health HTTP/1.1\" 429 54 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:53:58"}
+{"level":"info","message":"SIGINT received. Starting graceful shutdown...","timestamp":"2026-07-21 00:55:09"}
+{"level":"info","message":"HTTP server closed.","timestamp":"2026-07-21 00:55:09"}
+{"level":"info","message":"Prisma disconnected.","timestamp":"2026-07-21 00:55:09"}
+{"level":"info","message":"6379","timestamp":"2026-07-21 00:55:11"}
+{"level":"info","message":"Redis Connected","timestamp":"2026-07-21 00:55:11"}
+{"level":"info","message":"BullMQ Redis Connected","timestamp":"2026-07-21 00:55:11"}
+{"level":"info","message":"Redis Connected","timestamp":"2026-07-21 00:55:11"}
+{"level":"info","message":"Topics index already exists.","timestamp":"2026-07-21 00:55:11"}
+{"level":"info","message":"Server is running on http://localhost:3000","timestamp":"2026-07-21 00:55:11"}
+{"level":"info","message":"Health endpoint: http://localhost:3000/health","timestamp":"2026-07-21 00:55:11"}
+{"level":"info","message":"Readiness endpoint: http://localhost:3000/ready","timestamp":"2026-07-21 00:55:11"}
+{"level":"info","message":"[2026-07-20T19:25:26.479Z] GET /health","timestamp":"2026-07-21 00:55:26"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:26 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:26"}
+{"level":"info","message":"[2026-07-20T19:25:28.137Z] GET /health","timestamp":"2026-07-21 00:55:28"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:28 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:28"}
+{"level":"info","message":"[2026-07-20T19:25:29.079Z] GET /health","timestamp":"2026-07-21 00:55:29"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:29 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:29"}
+{"level":"info","message":"[2026-07-20T19:25:30.431Z] GET /health","timestamp":"2026-07-21 00:55:30"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:30 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:30"}
+{"level":"info","message":"[2026-07-20T19:25:31.313Z] GET /health","timestamp":"2026-07-21 00:55:31"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:31 +0000] \"GET /health HTTP/1.1\" 200 210 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:31"}
+{"level":"info","message":"[2026-07-20T19:25:32.331Z] GET /health","timestamp":"2026-07-21 00:55:32"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:32 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:32"}
+{"level":"info","message":"[2026-07-20T19:25:33.403Z] GET /health","timestamp":"2026-07-21 00:55:33"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:33 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:33"}
+{"level":"info","message":"[2026-07-20T19:25:36.017Z] GET /health","timestamp":"2026-07-21 00:55:36"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:36 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:36"}
+{"level":"info","message":"[2026-07-20T19:25:37.771Z] GET /health","timestamp":"2026-07-21 00:55:37"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:37 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:37"}
+{"level":"info","message":"[2026-07-20T19:25:38.954Z] GET /health","timestamp":"2026-07-21 00:55:38"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:38 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:38"}
+{"level":"info","message":"[2026-07-20T19:25:40.277Z] GET /health","timestamp":"2026-07-21 00:55:40"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:40 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:40"}
+{"level":"info","message":"[2026-07-20T19:25:41.399Z] GET /health","timestamp":"2026-07-21 00:55:41"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:41 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:41"}
+{"level":"info","message":"[2026-07-20T19:25:42.604Z] GET /health","timestamp":"2026-07-21 00:55:42"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:42 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:42"}
+{"level":"info","message":"[2026-07-20T19:25:43.125Z] GET /health","timestamp":"2026-07-21 00:55:43"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:43 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:43"}
+{"level":"info","message":"[2026-07-20T19:25:44.079Z] GET /health","timestamp":"2026-07-21 00:55:44"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:44 +0000] \"GET /health HTTP/1.1\" 200 211 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:44"}
+{"level":"info","message":"[2026-07-20T19:25:45.194Z] GET /health","timestamp":"2026-07-21 00:55:45"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:45 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:45"}
+{"level":"info","message":"[2026-07-20T19:25:46.404Z] GET /health","timestamp":"2026-07-21 00:55:46"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:46 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:46"}
+{"level":"info","message":"[2026-07-20T19:25:47.310Z] GET /health","timestamp":"2026-07-21 00:55:47"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:47 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:47"}
+{"level":"info","message":"[2026-07-20T19:25:48.663Z] GET /health","timestamp":"2026-07-21 00:55:48"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:48 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:48"}
+{"level":"info","message":"[2026-07-20T19:25:49.687Z] GET /health","timestamp":"2026-07-21 00:55:49"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:49 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:49"}
+{"level":"info","message":"[2026-07-20T19:25:50.795Z] GET /health","timestamp":"2026-07-21 00:55:50"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:50 +0000] \"GET /health HTTP/1.1\" 200 209 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:50"}
+{"level":"info","message":"[2026-07-20T19:25:51.914Z] GET /health","timestamp":"2026-07-21 00:55:51"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:51 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:51"}
+{"level":"info","message":"[2026-07-20T19:25:52.964Z] GET /health","timestamp":"2026-07-21 00:55:52"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:52 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:52"}
+{"level":"info","message":"[2026-07-20T19:25:53.798Z] GET /health","timestamp":"2026-07-21 00:55:53"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:53 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:53"}
+{"level":"info","message":"[2026-07-20T19:25:54.726Z] GET /health","timestamp":"2026-07-21 00:55:54"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:54 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:54"}
+{"level":"info","message":"[2026-07-20T19:25:55.745Z] GET /health","timestamp":"2026-07-21 00:55:55"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:55 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:55"}
+{"level":"info","message":"[2026-07-20T19:25:56.743Z] GET /health","timestamp":"2026-07-21 00:55:56"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:56 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:56"}
+{"level":"info","message":"[2026-07-20T19:25:57.762Z] GET /health","timestamp":"2026-07-21 00:55:57"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:57 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:57"}
+{"level":"info","message":"[2026-07-20T19:25:59.000Z] GET /health","timestamp":"2026-07-21 00:55:59"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:25:59 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:55:59"}
+{"level":"info","message":"[2026-07-20T19:26:00.009Z] GET /health","timestamp":"2026-07-21 00:56:00"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:00 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:00"}
+{"level":"info","message":"[2026-07-20T19:26:01.086Z] GET /health","timestamp":"2026-07-21 00:56:01"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:01 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:01"}
+{"level":"info","message":"[2026-07-20T19:26:02.045Z] GET /health","timestamp":"2026-07-21 00:56:02"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:02 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:02"}
+{"level":"info","message":"[2026-07-20T19:26:03.294Z] GET /health","timestamp":"2026-07-21 00:56:03"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:03 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:03"}
+{"level":"info","message":"[2026-07-20T19:26:04.368Z] GET /health","timestamp":"2026-07-21 00:56:04"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:04 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:04"}
+{"level":"info","message":"[2026-07-20T19:26:05.572Z] GET /health","timestamp":"2026-07-21 00:56:05"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:05 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:05"}
+{"level":"info","message":"[2026-07-20T19:26:06.743Z] GET /health","timestamp":"2026-07-21 00:56:06"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:06 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:06"}
+{"level":"info","message":"[2026-07-20T19:26:07.869Z] GET /health","timestamp":"2026-07-21 00:56:07"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:07 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:07"}
+{"level":"info","message":"[2026-07-20T19:26:08.888Z] GET /health","timestamp":"2026-07-21 00:56:08"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:08 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:08"}
+{"level":"info","message":"[2026-07-20T19:26:09.945Z] GET /health","timestamp":"2026-07-21 00:56:09"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:09 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:09"}
+{"level":"info","message":"[2026-07-20T19:26:10.851Z] GET /health","timestamp":"2026-07-21 00:56:10"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:10 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:10"}
+{"level":"info","message":"[2026-07-20T19:26:11.782Z] GET /health","timestamp":"2026-07-21 00:56:11"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:11 +0000] \"GET /health HTTP/1.1\" 200 208 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:11"}
+{"level":"info","message":"[2026-07-20T19:26:12.768Z] GET /health","timestamp":"2026-07-21 00:56:12"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:12 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:12"}
+{"level":"info","message":"[2026-07-20T19:26:13.520Z] GET /health","timestamp":"2026-07-21 00:56:13"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:13 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:13"}
+{"level":"info","message":"[2026-07-20T19:26:14.124Z] GET /health","timestamp":"2026-07-21 00:56:14"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:14 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:14"}
+{"level":"info","message":"[2026-07-20T19:26:14.788Z] GET /health","timestamp":"2026-07-21 00:56:14"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:14 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:14"}
+{"level":"info","message":"[2026-07-20T19:26:16.208Z] GET /health","timestamp":"2026-07-21 00:56:16"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:16 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:16"}
+{"level":"info","message":"[2026-07-20T19:26:17.059Z] GET /health","timestamp":"2026-07-21 00:56:17"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:17 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:17"}
+{"level":"info","message":"[2026-07-20T19:26:17.700Z] GET /health","timestamp":"2026-07-21 00:56:17"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:17 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:17"}
+{"level":"info","message":"[2026-07-20T19:26:20.437Z] GET /health","timestamp":"2026-07-21 00:56:20"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:20 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:20"}
+{"level":"info","message":"[2026-07-20T19:26:21.219Z] GET /health","timestamp":"2026-07-21 00:56:21"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:21 +0000] \"GET /health HTTP/1.1\" 200 212 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:21"}
+{"level":"info","message":"[2026-07-20T19:26:22.964Z] GET /health","timestamp":"2026-07-21 00:56:22"}
+{"level":"info","message":"::1 - - [20/Jul/2026:19:26:22 +0000] \"GET /health HTTP/1.1\" 200 211 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-07-21 00:56:22"}
+{"level":"info","message":"SIGINT received. Starting graceful shutdown...","timestamp":"2026-07-21 00:59:58"}
+{"level":"info","message":"HTTP server closed.","timestamp":"2026-07-21 00:59:58"}
+{"level":"info","message":"Prisma disconnected.","timestamp":"2026-07-21 00:59:58"}

@@ -1,3 +1,7 @@
+const helmet = require("helmet");
+const cors = require("cors");
+const rateLimit = require("express-rate-limit");
+
 require('dotenv').config();
 
 const morgan = require("morgan");
@@ -6,9 +10,13 @@ const logger = require("./utils/logger");
 const express = require('express');
 const app = express();
 
-const prisma = require("./config/prisma");
-const elasticClient = require("./config/elasticsearch");
-const redisClient = require("./config/redis");
+const limiter = rateLimit({
+    windowMs: (Number(process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000), // 15 minutes
+    max: Number(process.env.RATE_LIMIT_MAX || 100), // max requests per IP
+    message: {
+        error: "Too many requests. Please try again later.",
+    },
+});
 
 const loggerMiddleware = require('./middleware/loggerMiddleware');
 const notFoundMiddleware = require('./middleware/notFoundMiddleware');
@@ -27,51 +35,21 @@ app.use( //morgan combined logs with logger stream
     })
 );
 
+app.use(helmet()); //basic security headers
+
+app.use(
+    cors({
+        origin: process.env.CLIENT_URL || "http://localhost:5173", //only allow frontend to connect
+    })
+);
+
+app.use(limiter); //rate limiting
+
 // parse incoming JSON request bodies
 app.use(express.json());
 
 // log every incoming request
 app.use(loggerMiddleware);
-
-// Health Check
-app.get("/health", (req, res) => {
-
-    res.status(200).json({
-        status: "OK",
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || "development",
-        memory: process.memoryUsage(),
-    });
-
-});
-
-// Readiness Check
-app.get("/ready", async (req, res) => {
-    try {
-        // PostgreSQL
-        await prisma.$queryRaw`SELECT 1`; //SELECT 1 is used for quick DB check which doesn't require any table to be there
-
-        // Redis
-        await redisClient.ping(); //checks if redis is reachable
-
-        // Elasticsearch
-        await elasticClient.ping(); //checks if elasticsearch is reachable
-
-        res.status(200).json({
-            status: "READY",
-        });
-
-    } catch (error) {
-
-        res.status(503).json({
-            status: "NOT_READY",
-            error: error.message,
-        });
-
-    }
-
-});
 
 // route groups
 app.use('/', healthRoutes);
