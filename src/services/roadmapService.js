@@ -1,8 +1,34 @@
 const roadmapRepository = require('../repositories/roadmapRepository');
+const redisClient = require('../config/redis');
+const logger = require("../utils/logger");
+
+const ROADMAP_CACHE_KEY = 'roadmaps';
+const CACHE_TTL = 60 * 5; // 5 minutes
 
 // Get all roadmaps
 async function getAllRoadmaps() {
-    return roadmapRepository.getAllRoadmaps();
+    // Check cache first
+    const cachedRoadmaps = await redisClient.get(ROADMAP_CACHE_KEY);
+
+    if (cachedRoadmaps) {
+        logger.info("CACHE HIT");
+        return JSON.parse(cachedRoadmaps);
+    }
+    logger.info("CACHE MISS");
+
+    // Get from database
+    const roadmaps = await roadmapRepository.getAllRoadmaps();
+
+    // Set cache with 5-minute TTL
+    await redisClient.set(
+        ROADMAP_CACHE_KEY,
+        JSON.stringify(roadmaps),
+        {
+            EX: CACHE_TTL
+        }
+    );
+
+    return roadmaps;
 }
 
 // Create roadmap
@@ -61,26 +87,32 @@ async function createRoadmap(data) {
         cleanDifficulty = difficulty;
     }
 
-    return roadmapRepository.createRoadmap({
+    const roadmap = await roadmapRepository.createRoadmap({
         title: cleanTitle,
         description: cleanDescription,
         difficulty: cleanDifficulty,
     });
+
+    // Invalidate cache
+    await redisClient.del(ROADMAP_CACHE_KEY);
+
+    return roadmap;
 }
 
 // Update roadmap
 async function updateRoadmap(id, data) {
     try {
-        return await roadmapRepository.updateRoadmap(id, data);
+        const roadmap = await roadmapRepository.updateRoadmap(id, data);
+
+        // Invalidate cache
+        await redisClient.del(ROADMAP_CACHE_KEY);
+
+        return roadmap;
 
     } catch (err) {
-
-        // Prisma error: Record not found
         if (err.code === 'P2025') {
             throw new Error('Roadmap not found');
         }
-
-        // Pass unknown errors forward
         throw err;
     }
 }
@@ -88,7 +120,12 @@ async function updateRoadmap(id, data) {
 // Delete roadmap
 async function deleteRoadmap(id) {
     try {
-        return await roadmapRepository.deleteRoadmap(id);
+        const roadmap = await roadmapRepository.deleteRoadmap(id);
+
+        // Invalidate cache
+        await redisClient.del(ROADMAP_CACHE_KEY);
+
+        return roadmap;
 
     } catch (err) {
 

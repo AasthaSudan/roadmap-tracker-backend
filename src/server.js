@@ -20,6 +20,8 @@ const emailWorker = require("./queues/emailQueue");
 
 const PORT = config.port;
 
+let isShuttingDown = false;
+
 async function startServer() {
     try {
 
@@ -39,6 +41,12 @@ async function startServer() {
 
         async function gracefulShutdown(signal) {
 
+            if (isShuttingDown) {
+                return;
+            }
+
+            isShuttingDown = true;
+
             logger.info(`${signal} received. Starting graceful shutdown...`);
 
             // Stop accepting new HTTP requests.
@@ -55,8 +63,10 @@ async function startServer() {
                 }
 
                 try {
-                    await redisClient.quit();
-                    logger.info("Redis disconnected.");
+                    if (redisClient.isOpen) {
+                        await redisClient.quit();
+                        logger.info("Redis disconnected.");
+                    }
                 } catch (err) {
                     logger.error("Failed to disconnect Redis:", err);
                 }

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require("../config/env");
+const logger = require("../utils/logger");
 
 // middleware to authenticate token
 function authMiddleware(req, res, next) {
@@ -20,13 +21,12 @@ function authMiddleware(req, res, next) {
     }
 
     try {
-        logger.info("Received Token:", token);
+        logger.info("JWT authentication started.");
 
         // verify token using the same JWT secret stored in .env
         const decodedToken = jwt.verify(token, config.jwtSecret);
 
-        logger.info("Decoded Token:", decodedToken);
-
+        logger.info(`Authenticated user: ${decodedToken.email}`);
         // Attach decoded user info to request
         // This lets protected route handlers access the logged-in user's data using req.user
         req.user = decodedToken;

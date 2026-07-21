@@ -2,6 +2,7 @@ const transporter = require("../config/mail");
 const { welcomeEmailTemplate } = require("../templates/welcomeEmail");
 const config = require("../config/env");
 const { topicCreatedTemplate } = require("../templates/topicCreatedEmail");
+const logger = require("../utils/logger");
 
 async function sendWelcomeEmail(email, name) {
     const info = await transporter.sendMail({

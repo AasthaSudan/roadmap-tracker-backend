@@ -1,3 +1,5 @@
+const compression = require("compression");
+
 const helmet = require("helmet");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
@@ -36,6 +38,8 @@ app.use( //morgan combined logs with logger stream
 );
 
 app.use(helmet()); //basic security headers
+
+app.use(compression()); //compresses response bodies
 
 app.use(
     cors({

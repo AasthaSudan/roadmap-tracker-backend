@@ -2,7 +2,14 @@ const prisma = require('../config/prisma');
 
 // Fetch all roadmaps
 async function getAllRoadmaps() {
-    return prisma.roadmap.findMany();
+    return prisma.roadmap.findMany({
+        select: {
+            id: true,
+            title: true,
+            description: true,
+            difficulty: true,
+        },
+    });
 }
 
 // Create a new roadmap
