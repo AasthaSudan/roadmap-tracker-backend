@@ -1,4 +1,6 @@
+const concurrencyRoutes = require("./routes/concurrencyRoutes");
 const compression = require("compression");
+const testRoutes = require("./routes/testRoutes");
 
 const helmet = require("helmet");
 const cors = require("cors");
@@ -63,6 +65,8 @@ app.use('/api/v1', topicRoutes);
 app.use('/api/v1', authRoutes);
 app.use('/api/v1', githubRoutes);
 app.use('/api/v1/email', emailRoutes);
+app.use("/api/v1", concurrencyRoutes);
+app.use("/api/v1/test", testRoutes);
 
 // 404 handler -> runs only if no route matched above
 app.use(notFoundMiddleware);
