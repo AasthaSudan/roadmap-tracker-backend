@@ -1,6 +1,7 @@
 const concurrencyRoutes = require("./routes/concurrencyRoutes");
 const compression = require("compression");
 const testRoutes = require("./routes/testRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 const helmet = require("helmet");
 const cors = require("cors");
@@ -54,6 +55,11 @@ app.use(limiter); //rate limiting
 // parse incoming JSON request bodies
 app.use(express.json());
 
+const path = require("path"); //used to resolve file paths
+
+//serve static files from the uploads folder
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 // log every incoming request
 app.use(loggerMiddleware);
 
@@ -67,6 +73,7 @@ app.use('/api/v1', githubRoutes);
 app.use('/api/v1/email', emailRoutes);
 app.use("/api/v1", concurrencyRoutes);
 app.use("/api/v1/test", testRoutes);
+app.use('/api/v1/upload', uploadRoutes);
 
 // 404 handler -> runs only if no route matched above
 app.use(notFoundMiddleware);

@@ -3,39 +3,50 @@
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
-generator client { // Generates the Prisma Client (JavaScript code used to interact with the database)
+generator client {
   provider = "prisma-client-js" // Tells Prisma to generate the Prisma Client
 }
 
-datasource db { // Defines which type of database this project uses
+datasource db {
   provider = "postgresql" // The database type is PostgreSQL
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
-model Roadmap { // Defines the structure of the Roadmap table
-  id          Int     @id @default(autoincrement()) // Primary key; if no id is provided, the database automatically generates the next integer
-  title       String  // Req string col
-  description String  // Req string col
-  difficulty  Int?    // Optional integer col (? means nullable)
+model Roadmap {
+  id          Int    @id @default(autoincrement()) // Primary key; if no id is provided, the database automatically generates the next integer
+  title       String // Req string col
+  description String // Req string col
+  difficulty  Int? // Optional integer col (? means nullable)
 
   topics Topic[]
 }
 
 model Topic {
-  id           Int     @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-  title        String
-  dayNumber    Int
+  title     String
+  dayNumber Int
 
-  difficulty   Int?
-  notes        String?
+  difficulty Int?
+  notes      String?
 
-  status       String
-  stuckReason  String?
+  status      String
+  stuckReason String?
 
-  timeStarted  DateTime?
-  timeEnded    DateTime?
+  timeStarted DateTime?
+  timeEnded   DateTime?
 
-  roadmapId    Int
-  roadmap      Roadmap @relation(fields:[roadmapId], references:[id])
+  roadmapId Int
+  roadmap   Roadmap @relation(fields: [roadmapId], references: [id])
+}
+
+model File {
+  id           Int      @id @default(autoincrement())
+  originalName String
+  fileName     String
+  mimeType     String
+  size         Int
+  path         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
