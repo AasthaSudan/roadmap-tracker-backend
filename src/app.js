@@ -1,7 +1,5 @@
-const concurrencyRoutes = require("./routes/concurrencyRoutes");
 const compression = require("compression");
-const testRoutes = require("./routes/testRoutes");
-const uploadRoutes = require("./routes/uploadRoutes");
+const routes = require("./routes");
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
@@ -30,12 +28,7 @@ const loggerMiddleware = require('./middleware/loggerMiddleware');
 const notFoundMiddleware = require('./middleware/notFoundMiddleware');
 const errorMiddleware = require('./middleware/errorMiddleware');
 
-const healthRoutes = require('./routes/healthRoutes');
-const roadmapRoutes = require('./routes/roadmapRoutes');
-const authRoutes = require('./routes/authRoutes');
-const githubRoutes = require('./routes/githubRoutes');
-const topicRoutes = require('./routes/topicRoutes');
-const emailRoutes = require('./routes/emailRoutes');
+
 
 app.use( //morgan combined logs with logger stream
     morgan("combined", { //predefined format, combined = dev + common + referrer + timing (detailed production format)
@@ -68,16 +61,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(loggerMiddleware);
 
 // route groups
-app.use('/', healthRoutes);
-
-app.use('/api/v1/', roadmapRoutes);
-app.use('/api/v1', topicRoutes);
-app.use('/api/v1', authRoutes);
-app.use('/api/v1', githubRoutes);
-app.use('/api/v1/email', emailRoutes);
-app.use("/api/v1", concurrencyRoutes);
-app.use("/api/v1/test", testRoutes);
-app.use('/api/v1/upload', uploadRoutes);
+app.use(routes);
 
 // swagger routes
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

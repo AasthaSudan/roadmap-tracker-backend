@@ -1,0 +1,27 @@
+const express = require('express');
+const {
+    createTopic,
+    getTopics,
+    getTopicById,
+    updateTopic,
+    deleteTopic,
+    getRelatedCommits,
+    searchTopics,
+} = require('../../controllers/topicController');
+const authMiddleware = require('../../middleware/authMiddleware');
+
+const router = express.Router();
+
+// Topic CRUD routes
+router.post('/topics', authMiddleware, createTopic);
+
+const cacheMiddleware = require('../../middleware/cacheMiddleware');
+router.get('/topics', cacheMiddleware, getTopics);
+
+router.get('/topics/search', searchTopics);
+router.get('/topics/:id', getTopicById);
+router.patch('/topics/:id', authMiddleware, updateTopic);
+router.delete('/topics/:id', authMiddleware, deleteTopic);
+router.get('/topics/:id/related-commits', getRelatedCommits);
+
+module.exports = router;

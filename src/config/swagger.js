@@ -29,8 +29,8 @@ const options = { // swagger options
             }
         }
     },
-    apis: [ // api routes
-        "./src/routes/*.js" // routes
+    apis: [
+        "./src/routes/**/*.js" // ** means scan all nested folders
     ]
 };
 
