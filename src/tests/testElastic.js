@@ -1,4 +1,4 @@
-const client = require("./config/elasticsearch");
+const client = require("../config/elasticsearch");
 const logger = require("../utils/logger");
 
 async function testConnection() {

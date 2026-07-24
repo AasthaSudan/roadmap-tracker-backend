@@ -1,4 +1,4 @@
-const elasticsearchService = require("./services/elasticsearchService");
+const elasticsearchService = require("../services/elasticsearchService");
 const logger = require("../utils/logger");
 
 async function main() {

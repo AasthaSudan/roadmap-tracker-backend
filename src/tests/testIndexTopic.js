@@ -1,4 +1,4 @@
-const elasticsearchService = require("./services/elasticsearchService");
+const elasticsearchService = require("../services/elasticsearchService");
 
 async function main() {
 

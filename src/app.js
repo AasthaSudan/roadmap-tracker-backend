@@ -47,6 +47,7 @@ app.use(compression()); //compresses response bodies
 app.use(
     cors({
         origin: process.env.CLIENT_URL || "http://localhost:5173", //only allow frontend to connect
+        credentials: true, 
     })
 );
 

@@ -1,7 +1,11 @@
+const http = require("http");
+
 const app = require("./app");
 
 const logger = require("./utils/logger");
 const config = require("./config/env");
+
+const initSocket = require("./socket");
 
 // Database
 const prisma = require("./config/prisma");
@@ -25,15 +29,22 @@ let isShuttingDown = false;
 async function startServer() {
     try {
 
-        // Connect Redis before starting Express
+        // Connect Redis before starting the server
         await redisClient.connect();
         logger.info("Redis Connected");
 
         // Create Elasticsearch index if it doesn't already exist
         await elasticsearchService.createIndex();
 
-        // Start Express server
-        const server = app.listen(PORT, () => {
+        // Create the actual HTTP server using the Express app
+        // Socket.IO attaches to this HTTP server, NOT directly to Express
+        const httpServer = http.createServer(app);
+
+        // Initialize Socket.IO and attach it to the HTTP server
+        const io = initSocket(httpServer);
+
+        // Start listening for both HTTP requests and WebSocket connections
+        httpServer.listen(PORT, () => {
             logger.info(`Server is running on http://localhost:${PORT}`);
             logger.info(`Health endpoint: http://localhost:${PORT}/health`);
             logger.info(`Readiness endpoint: http://localhost:${PORT}/ready`);
@@ -49,9 +60,14 @@ async function startServer() {
 
             logger.info(`${signal} received. Starting graceful shutdown...`);
 
-            // Stop accepting new HTTP requests.
-            // Existing requests are allowed to finish.
-            server.close(async () => {
+            // Stop accepting new HTTP requests and WebSocket upgrade requests.
+            // Existing requests/connections are allowed to finish gracefully.
+            // Close all Socket.IO connections first
+            io.close(() => {
+                logger.info("Socket.IO server closed.");
+            });
+
+            httpServer.close(async () => {
 
                 logger.info("HTTP server closed.");
 
@@ -78,35 +94,35 @@ async function startServer() {
                     logger.error("Failed to close BullMQ worker:", err);
                 }
 
+                // Elasticsearch JS client doesn't require explicit disconnect
                 logger.info("Elasticsearch client cleanup not required.");
 
                 logger.info("Graceful shutdown completed.");
 
-                // Exit successfully
                 process.exit(0);
             });
 
-            // Force shutdown if cleanup hangs
+            // Force shutdown if graceful shutdown takes too long
             setTimeout(() => {
 
                 logger.error("Graceful shutdown timed out. Force exiting...");
 
-                process.exit(1); //forceful exit
+                process.exit(1);
 
-            }, 10000); //10 second timeout
+            }, 10000);
         }
 
-        // Listen for Ctrl + C
+        // Ctrl + C
         process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 
-        // Listen for Docker/Kubernetes termination
+        // Docker / Kubernetes shutdown
         process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 
     } catch (error) {
 
-        logger.error("Failed to start server:", error);
+        console.error("Failed to start server:", error);
 
-        process.exit(1); //startup failed
+        process.exit(1);
     }
 }
 
