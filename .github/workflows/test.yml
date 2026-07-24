@@ -1,0 +1,36 @@
+name: Backend Tests # Name shown on GitHub Actions tab
+
+# Every push to main branch runs CI.
+on:
+  push:
+    branches:
+      - main # Trigger on push to main branch
+
+  pull_request:
+    branches:
+      - main # Trigger on pull request to main branch
+
+# A job is a set of steps that run on a runner.
+jobs:
+  test: # Job ID
+
+    runs-on: ubuntu-latest # Runner environment
+
+    steps: # Steps
+
+      - name: Checkout code # Checks out repo to runner
+        uses: actions/checkout@v4 # downloads the repository code to the runner
+
+
+      - name: Setup Node.js # Sets up Node.js environment
+        uses: actions/setup-node@v4 # installs node environment on runner
+        with:
+          node-version: 20 # 20.x version of Node.js
+
+
+      - name: Install dependencies # Installs dependencies
+        run: npm install # command that installs all dependencies listed in package.json
+
+
+      - name: Run tests # Runs tests
+        run: npm test # runs all tests
