@@ -3,6 +3,9 @@ const compression = require("compression");
 const testRoutes = require("./routes/testRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
+
 const helmet = require("helmet");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
@@ -47,7 +50,7 @@ app.use(compression()); //compresses response bodies
 app.use(
     cors({
         origin: process.env.CLIENT_URL || "http://localhost:5173", //only allow frontend to connect
-        credentials: true, 
+        credentials: true,
     })
 );
 
@@ -75,6 +78,9 @@ app.use('/api/v1/email', emailRoutes);
 app.use("/api/v1", concurrencyRoutes);
 app.use("/api/v1/test", testRoutes);
 app.use('/api/v1/upload', uploadRoutes);
+
+// swagger routes
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // 404 handler -> runs only if no route matched above
 app.use(notFoundMiddleware);
